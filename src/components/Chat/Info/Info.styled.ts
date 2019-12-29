@@ -12,3 +12,15 @@ export const Name = styled.div`
 export const InfoWrapper = styled.div`
     
 `
+
+export const NoInfo = styled.div`
+
+`
+
+export const AccountType = styled.div`
+
+`
+
+export const Email = styled.div`
+
+`

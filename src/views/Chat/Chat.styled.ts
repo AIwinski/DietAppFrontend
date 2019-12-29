@@ -35,3 +35,11 @@ export const ChatWindow = styled.div`
 export const ChatInfoWrapper = styled.div`
     position: relative;
 `
+
+export const NewMessageBadge = styled.div`
+
+`
+
+export const NoMessagesBadge = styled.div`
+
+`

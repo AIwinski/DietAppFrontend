@@ -1,11 +1,17 @@
 import React from "react";
-import { InfoStyled, InfoWrapper, Name } from "./Info.styled";
+import { InfoStyled, InfoWrapper, Name, NoInfo, Email, AccountType } from "./Info.styled";
 import Loader from "../../Loader/Loader";
+import Avatar from "../../Avatar/Avatar";
 
 type Props = {
-    info: {
-        name: string;
-    } | undefined;
+    info:
+        | {
+              displayName: string;
+              avatar: string;
+              accountType: string;
+              email: string;
+          }
+        | undefined;
 };
 
 const Info = (props: Props) => {
@@ -14,11 +20,14 @@ const Info = (props: Props) => {
         <InfoStyled>
             {info ? (
                 <InfoWrapper>
-                    <Name>{info.name}</Name>
+                    <Avatar url={info.avatar}></Avatar>
+                    <Name>{info.displayName}</Name>
+                    <Email>{info.email}</Email>
+                    <AccountType>{info.accountType}</AccountType>
                 </InfoWrapper>
             ) : (
                 <InfoWrapper>
-                    <Name>no info</Name>
+                    <NoInfo>no info</NoInfo>
                 </InfoWrapper>
             )}
         </InfoStyled>
