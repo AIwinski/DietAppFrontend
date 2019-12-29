@@ -9,7 +9,7 @@ import { ApplicationState } from "../../store";
 import Loader from "../../components/Loader/Loader";
 import { RouteComponentProps } from "react-router";
 import useDocumentTitle from "../../hooks/useDocumentTitle";
-import { Chat as ChatApi, GetMessagesProps, SendMessageProps } from "../../api";
+import { Chat as ChatApi, GetMessagesProps } from "../../api";
 import { MESSAGES_PAGE_SIZE } from "../../constants/config";
 import { push } from "connected-react-router";
 import { socket } from "../../api";
@@ -78,6 +78,9 @@ const Chat = (props: Props) => {
     }, [conversations]);
 
     const updateMessages = (data: any) => {
+        if (data.createdNewConversation) {
+            setConversations([...conversations, data.newConversation]);
+        }
         if (activeConversationId == String(data.message.conversationId)) {
             setActiveConversationMessages([...activeConversationMessages, data.message]);
         }
@@ -129,7 +132,8 @@ const Chat = (props: Props) => {
     };
 
     const fetchMessages = () => {
-        let loadedMessages = activeConversationMessages || [];
+        let loadedMessages = activeConversationMessages.filter(m => String(m.conversationId) === activeConversationId) || [];
+        console.log(activeConversationId);
         const getMessagesProps: GetMessagesProps = {
             conversationId: activeConversationId,
             qty: MESSAGES_PAGE_SIZE,
@@ -137,6 +141,7 @@ const Chat = (props: Props) => {
         };
         ChatApi.getMessages(getMessagesProps)
             .then((res: any) => {
+                console.log(res.data.messages);
                 setActiveConversationMessages([...loadedMessages, ...res.data.messages]);
             })
             .catch((err: any) => {
@@ -191,7 +196,7 @@ const Chat = (props: Props) => {
                                     type={m.messageType}
                                     srcPath={m.srcPath}
                                     initialFileName={m.initialFileName}
-                                    isReceived={props.currentUser.id !== m.senderId}
+                                    isReceived={String(props.currentUser.id) === String(m.senderId)}
                                 ></Message>
                             ))
                         ) : (
