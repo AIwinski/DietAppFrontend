@@ -19,7 +19,7 @@ const Avatar = (props: Props) => {
 
     return (
         <AvatarWrapper isFull={props.isFull}>
-            <AvatarImage src={url}></AvatarImage>
+            <AvatarImage src={url} isFull={props.isFull}></AvatarImage>
         </AvatarWrapper>
     );
 };

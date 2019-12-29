@@ -13,10 +13,10 @@ export const AvatarWrapper = styled.div<Props>`
     border: 1px solid #ccc;
 `
 
-export const AvatarImage = styled.img`
+export const AvatarImage = styled.img<Props>`
     width: 100%;
     height: 100%;
     object-fit: cover;
     background-size: contain;
-    border-radius: ${AVATAR_SIZE};
+    border-radius: ${props => (props.isFull ? "0px": AVATAR_SIZE)};
 `

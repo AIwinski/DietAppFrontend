@@ -17,7 +17,8 @@ import {
     City,
     ProfileSection,
     ElementMissingInfo,
-    Info
+    Info,
+    Description
 } from "./Profile.styled";
 import { Link } from "react-router-dom";
 import { ApplicationState } from "../../store";
@@ -72,11 +73,9 @@ const Profile = (props: Props) => {
                 )}
                 {profile ? (
                     <React.Fragment>
-                        <ContactButton>
-                            <Link to={{ pathname: "/chat", state: { newConversationUserId: profile.ownerId } }}>Contact me</Link>
-                        </ContactButton>
                         <React.Fragment>
                             <ProfileSection>
+                                <Info>Informacje ogólne</Info>
                                 <MainWrapper>
                                     <AvatarImage>
                                         <Avatar
@@ -87,11 +86,24 @@ const Profile = (props: Props) => {
                                     <GeneralInfo>
                                         <Name>{profile.owner.displayName}</Name>
                                         <City>{profile.city}</City>
+                                        <ContactButton
+                                            to={{ pathname: "/chat", state: { newConversationUserId: profile.ownerId } }}
+                                        >
+                                            Contact me
+                                        </ContactButton>
                                     </GeneralInfo>
                                     <MainRating>
                                         <Rating rating={totalRating} numberOfRatings={numberOfReviews} />
                                     </MainRating>
                                 </MainWrapper>
+                            </ProfileSection>
+                            <ProfileSection>
+                                <Info>Opis</Info>
+                                {profile.descr ? (
+                                    <Description>{profile.descr}</Description>
+                                ) : (
+                                    <ElementMissingInfo>Ten profil nie ma jeszcze cennika</ElementMissingInfo>
+                                )}
                             </ProfileSection>
                             <ProfileSection>
                                 {profile.images.length > 0 ? (
@@ -118,6 +130,7 @@ const Profile = (props: Props) => {
                                 )}
                             </ProfileSection>
                             <ProfileSection>
+                                <Info>Recenzje</Info>
                                 <ReviewForm
                                     profile={profile}
                                     setRatingData={setRatingData}

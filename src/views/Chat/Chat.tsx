@@ -12,6 +12,7 @@ import useDocumentTitle from "../../hooks/useDocumentTitle";
 import { Chat as ChatApi, GetMessagesProps, SendMessageProps } from "../../api";
 import { MESSAGES_PAGE_SIZE } from "../../constants/config";
 import { push } from "connected-react-router";
+import { socket } from "../../api";
 
 interface MatchParams {
     id: string;
@@ -26,7 +27,7 @@ const Chat = (props: Props) => {
     const [activeConversationMessages, setActiveConversationMessages] = useState([] as any[]);
     const [activeConversationInfo, setActiveConversationInfo] = useState();
     const [newConversationUserId, setNewConversationUserId] = useState(
-        props.location && props.location.state ? props.location.state.newConversationUserId : ""
+        props.location && props.location.state ? props.location.state.newConversationUserId : undefined
     );
 
     useEffect(() => {
@@ -34,42 +35,74 @@ const Chat = (props: Props) => {
     }, []);
 
     useEffect(() => {
-        if (activeConversationId && !newConversationUserId) {
+        socket.on("MESSAGE", (data: any) => {
+            updateMessages(data);
+        });
+    }, [activeConversationMessages, activeConversationId]);
+
+    useEffect(() => {
+        if (activeConversationId) {
             fetchMessages();
         }
     }, [activeConversationId]);
 
+    useEffect(() => {
+        if (conversations === undefined) {
+            return;
+        }
+        if (newConversationUserId) {
+            let index = getConversationIndexByUserId(conversations, newConversationUserId);
+            if (index !== -1) {
+                changeActiveConversation(conversations[index].id);
+            }
+        } else {
+            if (activeConversationId) {
+                let index = conversations.findIndex((c: any) => c.id === activeConversationId);
+                if (index !== -1) {
+                    changeActiveConversation(conversations[index].id);
+                } else {
+                    if (conversations.length) {
+                        changeActiveConversation(conversations[0].id);
+                    } else {
+                        changeActiveConversation("");
+                    }
+                }
+            } else {
+                if (conversations.length) {
+                    changeActiveConversation(conversations[0].id);
+                } else {
+                    changeActiveConversation("");
+                }
+            }
+        }
+    }, [conversations]);
+
+    const updateMessages = (data: any) => {
+        if (activeConversationId == String(data.message.conversationId)) {
+            setActiveConversationMessages([...activeConversationMessages, data.message]);
+        }
+    };
+
+    const getConversationIndexByUserId = (conversations: any[], userId: string) => {
+        let result = -1;
+        conversations.forEach((c: any, index: number) => {
+            if (c.users.length > 1) {
+                c.users.forEach((u: any) => {
+                    if (u.id === userId && u.id !== props.currentUser.id) {
+                        result = index;
+                    }
+                });
+            } else if (c.users.length === 1 && c.users[0].id == props.currentUser.id) {
+                result = index;
+            }
+        });
+        return result;
+    };
+
     const fetchConversations = () => {
         ChatApi.getConversations()
             .then((res: any) => {
-                console.log(res);
-                let conversations = res.data.conversations;
-                setConversations(conversations);
-
-                let conversationWithSuchUserIndex = -1;
-                conversations.forEach((c: any, index: number) => {
-                    if (c.users.length === 2) {
-                        c.users.forEach((u: any) => {
-                            if (u.id === newConversationUserId) {
-                                console.log("CONVERSATION ALREADY EXISTS" + index);
-                                conversationWithSuchUserIndex = index;
-                            }
-                        });
-                    }
-                });
-                if (newConversationUserId) {
-                    if (conversationWithSuchUserIndex !== -1) {
-                        changeActiveConversation(conversations[conversationWithSuchUserIndex].id);
-                        setNewConversationUserId("");
-                    } else {
-                        //todo add mock conversation that would create new conversation
-                        //changeActiveConversation(newConversationUserId);
-                    }
-                } else {
-                    if (conversations.length > 0) {
-                        changeActiveConversation(conversations[0].id);
-                    }
-                }
+                setConversations(res.data.conversations);
             })
             .catch((err: any) => {
                 console.error(err);
@@ -77,32 +110,34 @@ const Chat = (props: Props) => {
     };
 
     const onMessageSent = (data: any) => {
-        const createdNewConversation = data.createdNewConversation;
-        if (createdNewConversation) {
+        if (data.createdNewConversation) {
             const newConversation = data.newConversation;
             setConversations([...conversations, newConversation]);
-            changeActiveConversation(createdNewConversation.id);
+            changeActiveConversation(newConversation.id);
         }
     };
 
     const changeActiveConversation = (id: string) => {
         setActiveConversationId(id);
         setConversationInfo(id);
-        props.push("/chat/" + id);
+        setNewConversationUserId(undefined);
+        if (id) {
+            props.push("/chat/" + id);
+        } else {
+            props.push("/chat");
+        }
     };
 
     const fetchMessages = () => {
+        let loadedMessages = activeConversationMessages || [];
         const getMessagesProps: GetMessagesProps = {
             conversationId: activeConversationId,
             qty: MESSAGES_PAGE_SIZE,
-            offset: activeConversationMessages.length
+            offset: loadedMessages.length
         };
         ChatApi.getMessages(getMessagesProps)
             .then((res: any) => {
-                console.log(res);
-
-                setActiveConversationMessages([...activeConversationMessages, ...res.data.messages]);
-                console.log([...activeConversationMessages, ...res.data.messages]);
+                setActiveConversationMessages([...loadedMessages, ...res.data.messages]);
             })
             .catch((err: any) => {
                 console.error(err);
@@ -110,8 +145,7 @@ const Chat = (props: Props) => {
     };
 
     const onConversationClick = (id: string) => {
-        console.log(id);
-        changeActiveConversation(id);
+        changeActiveConversation(String(id));
     };
 
     const parseConversationResponse = (conversations: any) => {
@@ -130,6 +164,7 @@ const Chat = (props: Props) => {
     };
 
     const setConversationInfo = (id: string) => {
+        console.log(conversations);
         setActiveConversationInfo({
             name: id
         });
@@ -143,19 +178,25 @@ const Chat = (props: Props) => {
             />
             <ConversationWrapper>
                 <ChatWindow>
-                    {activeConversationMessages != null ? (
-                        activeConversationMessages.map(m => (
-                            <Message
-                                text={m.text}
-                                key={m.id}
-                                id={m.id}
-                                date={m.createdAt}
-                                type={m.messageType}
-                                srcPath={m.srcPath}
-                                initialFileName={m.initialFileName}
-                                isReceived={props.currentUser.id !== m.senderId}
-                            ></Message>
-                        ))
+                    {newConversationUserId ? (
+                        <div>new conversation: {newConversationUserId}</div>
+                    ) : activeConversationMessages !== undefined ? (
+                        activeConversationMessages.length !== 0 ? (
+                            activeConversationMessages.map((m: any) => (
+                                <Message
+                                    text={m.text}
+                                    key={m.id}
+                                    id={m.id}
+                                    date={m.createdAt}
+                                    type={m.messageType}
+                                    srcPath={m.srcPath}
+                                    initialFileName={m.initialFileName}
+                                    isReceived={props.currentUser.id !== m.senderId}
+                                ></Message>
+                            ))
+                        ) : (
+                            <div>brak wiadomosci</div>
+                        )
                     ) : (
                         <Loader />
                     )}
