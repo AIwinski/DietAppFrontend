@@ -1,4 +1,4 @@
-import React, { useRef, useEffect } from "react";
+import React, { useRef, useEffect, useState } from "react";
 import { VideoChatStyled, VideoSection, ChatSection, MainVideo, SmallVideo } from "./VideoChat.styled";
 import { ApplicationState } from "../../store";
 import { RouteComponentProps } from "react-router-dom";
@@ -10,6 +10,9 @@ interface MatchParams {
 type Props = RouteComponentProps<MatchParams> & ReturnType<typeof mapStateToProps> & {};
 
 const VideoChat = (props: Props) => {
+    const [audioActive, setAudioActive] = useState(true);
+    const [videoActive, setVideoActive] = useState(true);
+
     const mediaStreamConstraints = {
         video: true,
         audio: true
@@ -22,19 +25,30 @@ const VideoChat = (props: Props) => {
 
     let localStream: any;
     let peerConnection: any;
+    // @ts-ignore
+    navigator.getWebCam =
+        navigator.getUserMedia ||
+        navigator.webkitGetUserMedia ||
+        navigator.mozGetUserMedia ||
+        navigator.mozGetUserMedia ||
+        navigator.msGetUserMedia;
 
     useEffect(() => {
         socket.on("WEBRTC", (data: any) => {
             console.log("WEBRTC");
-            console.log(data)
+            console.log(data);
             gotMessageFromServer(data);
         });
 
-        if (navigator.mediaDevices.getUserMedia) {
+        if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
             navigator.mediaDevices
                 .getUserMedia(mediaStreamConstraints)
                 .then(getUserMediaSuccess)
                 .catch(errorHandler);
+            // @ts-ignore
+        } else if (navigator.getWebCam) {
+            // @ts-ignore
+            navigator.getWebCam(mediaStreamConstraints, getUserMediaSuccess, errorHandler);
         } else {
             alert("Your browser does not support getUserMedia API");
         }
@@ -106,6 +120,22 @@ const VideoChat = (props: Props) => {
 
     const errorHandler = (error: any) => {
         console.log(error);
+    };
+
+    const toggleAudio = () => {
+        setAudioActive(!audioActive);
+        let audioTracks = localStream.getAudioTracks();
+        for (var i = 0; i < audioTracks.length; ++i) {
+            audioTracks[i].enabled = !audioTracks[i].enabled;
+        }
+    };
+
+    const toggleVideo = () => {
+        setVideoActive(!videoActive);
+        let audioTracks = localStream.getVideoTracks();
+        for (var i = 0; i < audioTracks.length; ++i) {
+            audioTracks[i].enabled = !audioTracks[i].enabled;
+        }
     };
 
     return (

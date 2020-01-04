@@ -8,6 +8,7 @@ let socket = io.connect(API_ROOT);
 
 socket.on("SET_ID", (id: string) => {
     localStorage.setItem("SOCKET_ID", id);
+    requests.get("/")
 });
 
 axios.interceptors.request.use(
