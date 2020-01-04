@@ -1,7 +1,9 @@
 import React from "react";
-import { MessageStyled, MessageWrapper } from "./Message.styled";
+import { MessageStyled, MessageWrapper, FileBadge } from "./Message.styled";
 import { MessageTypes, Chat as ChatApi } from "../../../api";
 import { saveAs } from "file-saver";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faDownload } from "@fortawesome/free-solid-svg-icons";
 
 type Props = {
     isReceived: boolean;
@@ -31,10 +33,7 @@ const Message = (props: Props) => {
         case MessageTypes.text:
             return (
                 <MessageWrapper>
-                    <MessageStyled isReceived={isReceived}>
-                        {text}
-                        {date}
-                    </MessageStyled>
+                    <MessageStyled isReceived={isReceived}>{text}</MessageStyled>
                 </MessageWrapper>
             );
         case MessageTypes.file:
@@ -42,8 +41,10 @@ const Message = (props: Props) => {
                 <MessageWrapper>
                     <MessageStyled isReceived={isReceived} onClick={() => downloadFile(id)}>
                         {text}
-                        {date}
-                        {initialFileName}
+                        <FileBadge>
+                            <FontAwesomeIcon icon={faDownload}></FontAwesomeIcon>
+                            {initialFileName}
+                        </FileBadge>
                     </MessageStyled>
                 </MessageWrapper>
             );

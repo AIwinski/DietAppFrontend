@@ -4,16 +4,25 @@ import FilterForm from "../../components/FilterForm/FilterForm";
 import SortingForm from "../../components/SortingForm/SortingForm";
 import Card from "../../components/Card/Card";
 import BottomScrollListener from "react-bottom-scroll-listener";
-import { ListData, ListFilters, ListSorting, ProfileListStyled } from "./ProfileList.styled";
+import {
+    ListData,
+    ListFilters,
+    ListSorting,
+    ProfileListStyled,
+    LoadMoreButton,
+    ButtonWrapper,
+    AllFetchedBadge
+} from "./ProfileList.styled";
 
 import { Profile as ProfileApi } from "../../api";
 import Loader from "../../components/Loader/Loader";
 import { ApplicationState } from "../../store";
+import BarLoader from "../../components/BarLoader/BarLoader";
 
 type Props = ReturnType<typeof mapStateToProps>;
 
 const ProfileList = (props: Props) => {
-    const [profiles, setProfiles] = React.useState([]);
+    const [profiles, setProfiles] = React.useState([] as any[]);
     const [isFetching, setIsFetching] = React.useState(false);
     const [allFetched, setAllFetched] = React.useState(false);
 
@@ -70,8 +79,7 @@ const ProfileList = (props: Props) => {
                     setAllFetched(true);
                     setIsFetching(false);
                 } else {
-                    const mergedProfiles = filterProfiles(fetchedProfiles.concat(profiles));
-                    setProfiles(mergedProfiles);
+                    setProfiles(filterProfiles([...profiles, ...fetchedProfiles]));
                     setIsFetching(false);
                 }
             });
@@ -98,14 +106,22 @@ const ProfileList = (props: Props) => {
                             id={item.id}
                         />
                     ))}
-                    {isFetching && <Loader />}
-                    {allFetched && <h3>Sciagnieto wszystkie posty</h3>}
+                    {isFetching && <BarLoader />}
+                    <ButtonWrapper>
+                        {!isFetching &&
+                            (allFetched ? (
+                                <AllFetchedBadge>Sciagnieto wszystkie posty</AllFetchedBadge>
+                            ) : (
+                                <LoadMoreButton onClick={tryFetchMore}>Załaduj więcej</LoadMoreButton>
+                            ))}
+                    </ButtonWrapper>
                 </ListData>
                 <ListSorting>
                     <SortingForm />
                 </ListSorting>
             </ProfileListStyled>
-            <BottomScrollListener onBottom={tryFetchMore} offset={100} />
+
+            {/* <BottomScrollListener onBottom={tryFetchMore} offset={100} /> */}
         </React.Fragment>
     );
 };

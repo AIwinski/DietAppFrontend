@@ -182,7 +182,8 @@ const Chat = (props: Props) => {
                     displayName: c.users[0].displayName,
                     accountType: c.users[0].accountType,
                     email: c.users[0].email,
-                    avatar: c.users[0].avatar
+                    avatar: c.users[0].avatar,
+                    userId: c.users[0].id,
                 };
             } else if (c.users.length > 1) {
                 let u = c.users.find((u: any) => String(u.id) !== String(props.currentUser.id));
@@ -191,7 +192,8 @@ const Chat = (props: Props) => {
                         displayName: u.displayName,
                         accountType: u.accountType,
                         email: u.email,
-                        avatar: u.avatar
+                        avatar: u.avatar,
+                        userId: u.id
                     };
                 } else {
                     data = undefined;

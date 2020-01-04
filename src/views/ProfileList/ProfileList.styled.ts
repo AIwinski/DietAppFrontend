@@ -3,7 +3,6 @@ import { NAV_HEIGHT } from '../../styles/variables';
 
 export const ProfileListStyled = styled.div`
     position: relative;
-    padding-top: ${NAV_HEIGHT};
     width: 100%;
     height: 100%;
     display: grid;
@@ -13,7 +12,6 @@ export const ProfileListStyled = styled.div`
 export const ListData = styled.div`
     border: 1px solid green;
     box-sizing: border-box;
-    height: 100%;
 `
 
 export const ListFilters = styled.div`
@@ -26,4 +24,19 @@ export const ListSorting = styled.div`
     padding: 1rem 2rem;
     box-sizing: border-box;
     height: 100%;
+`
+
+export const LoadMoreButton = styled.button`
+
+`
+
+export const ButtonWrapper = styled.div`
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 2rem 0;
+`
+export const AllFetchedBadge = styled.div`
+
 `

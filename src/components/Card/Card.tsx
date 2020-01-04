@@ -2,6 +2,7 @@ import React from "react";
 import Rating from "../Rating/Rating";
 import { Link } from "react-router-dom";
 import { CardStyled, CardImageWrapper, CardContent, CardContentLeft, CardContentRight, CardDescription, CardCity, PremiumTag, CardName } from "./Card.styled";
+import Avatar from "../Avatar/Avatar";
 
 type Props = {
     name: string;
@@ -21,7 +22,7 @@ const Card = (props: Props) => {
         <CardStyled isPremium={isPremium}>
             <Link to={profileURL}>
                 <CardImageWrapper>
-                    <img src={image} />
+                    <Avatar isFull={true} url={image}></Avatar>
                 </CardImageWrapper>
             </Link>
             <CardContent>

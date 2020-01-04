@@ -40,7 +40,7 @@ export type ResultsElementProps = {
 export const ResultsElement = styled.div<ResultsElementProps>`
     box-sizing: border-box;
     padding: 1rem;
-    background: ${props => (props.selected ? COLORS.white : COLORS.lightgray)};
+    background: ${props => (!props.selected ? COLORS.white : COLORS.lightgray)};
 
     &:last-of-type {
         border-bottom-left-radius: 20px;

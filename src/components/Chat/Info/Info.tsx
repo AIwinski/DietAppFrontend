@@ -1,7 +1,7 @@
 import React from "react";
 import { InfoStyled, InfoWrapper, Name, NoInfo, Email, AccountType } from "./Info.styled";
-import Loader from "../../Loader/Loader";
 import Avatar from "../../Avatar/Avatar";
+import { LinkStyled } from "../../Navbar/Navbar.styled";
 
 type Props = {
     info:
@@ -10,6 +10,7 @@ type Props = {
               avatar: string;
               accountType: string;
               email: string;
+              userId: string;
           }
         | undefined;
 };
@@ -24,6 +25,8 @@ const Info = (props: Props) => {
                     <Name>{info.displayName}</Name>
                     <Email>{info.email}</Email>
                     <AccountType>{info.accountType}</AccountType>
+                    {info.userId}
+                    <LinkStyled to={"/video/" + info.userId}>video chat</LinkStyled>
                 </InfoWrapper>
             ) : (
                 <InfoWrapper>

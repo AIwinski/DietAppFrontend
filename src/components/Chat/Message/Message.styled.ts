@@ -1,11 +1,12 @@
 import styled from "styled-components";
+import { COLORS } from "../../../styles/variables";
 
 type Props = {
     isReceived: boolean;
 }
 
 export const MessageStyled = styled.div<Props>`
-    border: 1px solid green;
+    border: 1px solid #ddd;
     display: flex;
     align-self: flex-start;
     padding: 0;
@@ -13,15 +14,17 @@ export const MessageStyled = styled.div<Props>`
     font-size: 1.6rem;
     line-height: 2rem;
     vertical-align: baseline;
-    padding: 0 1rem;
+    padding: 0.2rem 1.2rem;
     margin: 0.2rem 0;
     margin-right: 20%;
     border-top-left-radius: 6px;
+    background: #ccc;
     ${props =>
         props.isReceived &&
         `
         align-self: flex-end;
-        color: red;
+        color: white;
+        background: ${COLORS.blue};
         margin-right: 0;
         margin-left: 20%;
         border-top-left-radius: 40px;
@@ -36,3 +39,8 @@ export const MessageWrapper = styled.div`
     flex-direction: column;
     justify-content: center;
 `;
+
+export const FileBadge = styled.div`
+    cursor: pointer;
+    font-weight: bold;
+`

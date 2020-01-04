@@ -1,11 +1,11 @@
-import React, { useState, useEffect, RefObject, createRef, FormEvent, KeyboardEvent, MouseEvent } from "react";
+import React, { useState, useEffect, RefObject, createRef, FormEvent, KeyboardEvent, MouseEvent, useRef } from "react";
 import AwesomeDebouncePromise from "awesome-debounce-promise";
 import { Form, Input, ResultsContainer, ResultsElement } from "./DebouncedSearchInput.styled";
 
 type Props = {
     dataSource: (input: string) => {};
     delay: number;
-    callback: (data: any) => any;
+    callback: (id: string) => any;
     placeholder: string;
     name: string;
 };
@@ -15,12 +15,18 @@ const DebouncedSearchInput = (props: Props) => {
 
     const searchAPIDebounced = AwesomeDebouncePromise(props.dataSource, props.delay);
 
-    let formRef: RefObject<HTMLFormElement> = createRef();
+    let formRef: RefObject<HTMLFormElement> = useRef(null);
 
     const [input, setInput] = useState("");
-    const [results, setResults] = useState([]);
+    const [results, setResults] = useState([] as any[]);
     const [isFocused, setFocused] = useState(false);
     const [selected, setSelected] = useState(-1);
+
+    useEffect(() => {
+        if (selected !== -1) {
+            setInput(results[selected].owner.displayName);
+        }
+    }, [selected]);
 
     const onKeydown = async (e: KeyboardEvent<HTMLFormElement>) => {
         if (!isFocused || results.length === 0) {
@@ -31,18 +37,16 @@ const DebouncedSearchInput = (props: Props) => {
             setFocused(false);
         } else if (e.key === "ArrowDown") {
             if (selected === results.length - 1 || selected === -1) {
-                await setSelected(0);
+                setSelected(0);
             } else {
-                await setSelected(selected + 1);
+                setSelected(selected + 1);
             }
-            setInput(results[selected]);
         } else if (e.key === "ArrowUp") {
             if (selected === 0 || selected === -1) {
-                await setSelected(results.length - 1);
+                setSelected(results.length - 1);
             } else {
-                await setSelected(selected - 1);
+                setSelected(selected - 1);
             }
-            setInput(results[selected]);
         }
     };
 
@@ -55,16 +59,17 @@ const DebouncedSearchInput = (props: Props) => {
             setResults([]);
         } else {
             const searchResults = await searchAPIDebounced(inputValue);
-            console.log(results);
+            console.log(searchResults);
             setFocused(true);
-            setResults([]);
+            // @ts-ignore
+            setResults(searchResults.data.result);
         }
     };
 
     const onFormSubmit = (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         setFocused(false);
-        props.callback(input);
+        props.callback(results[selected].id);
     };
 
     const onFocus = () => {
@@ -100,19 +105,15 @@ const DebouncedSearchInput = (props: Props) => {
             />
             {isFocused && (
                 <ResultsContainer>
-                    {results.map((element: string, index: number) => (
+                    {results.map((element: any, index: number) => (
                         <ResultsElement
                             onClick={(e: MouseEvent<HTMLDivElement>) => {
-                                setInput(element);
-                                const node = formRef.current;
-                                if (node) {
-                                    node.submit();
-                                }
+                                props.callback(results[index].id);
                             }}
                             key={index}
                             selected={selected === index}
                         >
-                            {element}
+                            {element.owner.displayName + " " + element.city}
                         </ResultsElement>
                     ))}
                 </ResultsContainer>

@@ -64,7 +64,7 @@ const Profile = (props: Props) => {
     return (
         <ProfileStyled>
             <ContainerFluid>
-                {props.currentUser.profileId == id && profile && profile.accountCompletionRate < MIN_COMPLETION_RATE && (
+                {props.currentUser.profileId == id && profile && (profile.accountCompletionRate < MIN_COMPLETION_RATE) && (
                     <AlertStyled>
                         Twój profil nie jest w pełni wypełniony przez co nie bedzie widoczny na liście profili. &nbsp;Uzupełnij go
                         tutaj:

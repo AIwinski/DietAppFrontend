@@ -20,7 +20,7 @@ export const ReviewElement = styled.div`
     border-radius: 6px;
     margin: 1rem 0;
     background: white;
-    box-shadow: 0px 1px 10px 1px rgba(51, 255, 0, 0.2);
+    box-shadow: 0px 1px 10px 1px rgba(51, 51, 120, 0.1);
 
 `
 

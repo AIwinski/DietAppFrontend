@@ -22,6 +22,7 @@ import {
 } from "./ReviewForm.styled";
 import { LinkStyled } from "../Navbar/Navbar.styled";
 import Avatar from "../Avatar/Avatar";
+import BarLoader from "../BarLoader/BarLoader";
 
 type Props = {
     profile: any;
@@ -31,6 +32,7 @@ type Props = {
 
 const ReviewForm = (props: Props) => {
     const [reviews, setReviews] = useState(props.profile.ratings);
+    const [inProgress, setInProgress] = useState(false);
 
     return (
         <React.Fragment>
@@ -67,10 +69,11 @@ const ReviewForm = (props: Props) => {
                             ratingValue: 5,
                             content: ""
                         }}
-                        onSubmit={(values, { setFieldValue }) => {
+                        onSubmit={values => {
                             if (values.content.length === 0) {
                                 return;
                             }
+                            setInProgress(true);
 
                             const data = {
                                 profileId: props.profile.id,
@@ -91,6 +94,7 @@ const ReviewForm = (props: Props) => {
                                     let avgRating = sumOfReviews / numberOfRatings || 0;
 
                                     props.setRatingData(numberOfRatings, avgRating);
+                                    setInProgress(false);
                                 })
                                 .catch(err => {
                                     console.log(err);
@@ -112,6 +116,7 @@ const ReviewForm = (props: Props) => {
                             </Form>
                         )}
                     />
+                    {inProgress && <BarLoader></BarLoader>}
                 </React.Fragment>
             ) : (
                 <LoginFirstMessage>
