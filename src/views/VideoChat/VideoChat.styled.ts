@@ -46,5 +46,5 @@ export const SmallVideo = styled.video`
     bottom: 0.5rem;
     right: 0.5rem;
     height: 20%;
-    filter: opacity(0.6);
+    filter: opacity(1);
 `

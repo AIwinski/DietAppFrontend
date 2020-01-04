@@ -9,36 +9,55 @@ interface MatchParams {
 
 type Props = RouteComponentProps<MatchParams> & ReturnType<typeof mapStateToProps> & {};
 
-const VideoChat = (props: Props) => {
-    const [audioActive, setAudioActive] = useState(true);
-    const [videoActive, setVideoActive] = useState(true);
+let localStream: any;
+let peerConnection: any;
 
-    const mediaStreamConstraints = {
-        video: true,
-        audio: true
-    };
-    const config: RTCConfiguration = {
-        iceServers: [{ urls: "stun:stun.stunprotocol.org:3478" }, { urls: "stun:stun.l.google.com:19302" }]
-    };
+const mediaStreamConstraints = {
+    video: true,
+    audio: true
+};
+const config: RTCConfiguration = {
+    iceServers: [{ urls: "stun:stun.stunprotocol.org:3478" }, { urls: "stun:stun.l.google.com:19302" }]
+};
+
+const VideoChat = (props: Props) => {
+    const [localAudioActive, setLocalAudioActive] = useState(true);
+    const [localVideoActive, setLocalVideoActive] = useState(true);
+
+    const [remoteAudioActive, setRemoteAudioActive] = useState(true);
+    const [remoteVideoActive, setRemoteVideoActive] = useState(true);
+    const [isRemoteInRoom, setRemoteInRoom] = useState(false);
+
     const localVideoRef = useRef(null);
     const remoteVideoRef = useRef(null);
 
-    let localStream: any;
-    let peerConnection: any;
     // @ts-ignore
-    navigator.getWebCam =
-        navigator.getUserMedia ||
-        navigator.webkitGetUserMedia ||
-        navigator.mozGetUserMedia ||
-        navigator.mozGetUserMedia ||
-        navigator.msGetUserMedia;
 
     useEffect(() => {
+        socket.emit("WEBRTC_JOIN", { id: props.match.params.id });
         socket.on("WEBRTC", (data: any) => {
-            console.log("WEBRTC");
-            console.log(data);
             gotMessageFromServer(data);
         });
+
+        socket.on("WEBRTC_STATUS_CHANGED", (data: any) => {
+            setRemoteAudioActive(data.audio);
+            setRemoteVideoActive(data.video);
+        });
+
+        socket.on("WEBRTC_JOINED", () => {
+            setRemoteInRoom(true);
+        });
+
+        socket.on("WEBRTC_LEFT", () => {
+            setRemoteInRoom(false);
+        });
+
+        let getWebCam =
+            navigator.getUserMedia ||
+            navigator.webkitGetUserMedia ||
+            navigator.mozGetUserMedia ||
+            navigator.mozGetUserMedia ||
+            navigator.msGetUserMedia;
 
         if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
             navigator.mediaDevices
@@ -46,12 +65,18 @@ const VideoChat = (props: Props) => {
                 .then(getUserMediaSuccess)
                 .catch(errorHandler);
             // @ts-ignore
-        } else if (navigator.getWebCam) {
+        } else if (getWebCam) {
             // @ts-ignore
-            navigator.getWebCam(mediaStreamConstraints, getUserMediaSuccess, errorHandler);
+            getWebCam(mediaStreamConstraints, getUserMediaSuccess, errorHandler);
         } else {
             alert("Your browser does not support getUserMedia API");
         }
+    }, []);
+
+    useEffect(() => {
+        return () => {
+            socket.emit("WEBRTC_LEAVE", { id: props.match.params.id });
+        };
     }, []);
 
     const getUserMediaSuccess = (stream: any) => {
@@ -123,19 +148,22 @@ const VideoChat = (props: Props) => {
     };
 
     const toggleAudio = () => {
-        setAudioActive(!audioActive);
-        let audioTracks = localStream.getAudioTracks();
-        for (var i = 0; i < audioTracks.length; ++i) {
-            audioTracks[i].enabled = !audioTracks[i].enabled;
+        setLocalAudioActive(!localAudioActive);
+        let tracks = localStream.getAudioTracks();
+        for (var i = 0; i < tracks.length; ++i) {
+            tracks[i].enabled = !tracks[i].enabled;
         }
+        socket.emit("WEBRTC_CHANGE_STATUS", { audio: localAudioActive, video: localVideoActive, id: props.match.params.id });
     };
 
     const toggleVideo = () => {
-        setVideoActive(!videoActive);
-        let audioTracks = localStream.getVideoTracks();
-        for (var i = 0; i < audioTracks.length; ++i) {
-            audioTracks[i].enabled = !audioTracks[i].enabled;
+        setLocalVideoActive(!localVideoActive);
+
+        let tracks = localStream.getVideoTracks();
+        for (var i = 0; i < tracks.length; ++i) {
+            tracks[i].enabled = !tracks[i].enabled;
         }
+        socket.emit("WEBRTC_CHANGE_STATUS", { audio: localAudioActive, video: localVideoActive, id: props.match.params.id });
     };
 
     return (
@@ -147,6 +175,13 @@ const VideoChat = (props: Props) => {
             <ChatSection>
                 {props.match.params.id}
                 <button onClick={() => start(true)}>start</button>
+                <button onClick={() => toggleAudio()}>toggle audio</button>
+                <button onClick={() => toggleVideo()}>toggle video</button>
+                <div>local audio: {String(localAudioActive)}</div>
+                <div>local video: {String(localVideoActive)}</div>
+                <div>remote audio: {String(remoteAudioActive)}</div>
+                <div>remote video: {String(remoteVideoActive)}</div>
+                <div>is remote in room: {String(isRemoteInRoom)}</div>
             </ChatSection>
         </VideoChatStyled>
     );
