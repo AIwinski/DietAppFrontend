@@ -76,6 +76,7 @@ const VideoChat = (props: Props) => {
     useEffect(() => {
         return () => {
             socket.emit("WEBRTC_LEAVE", { id: props.match.params.id });
+            hangUp();
         };
     }, []);
 
@@ -107,7 +108,7 @@ const VideoChat = (props: Props) => {
                 .setRemoteDescription(new RTCSessionDescription(data.sdp))
                 .then(function() {
                     // Only create answers in response to offers
-                    if (data.sdp.type == "offer") {
+                    if (data.sdp.type === "offer") {
                         peerConnection
                             .createAnswer()
                             .then(createdDescription)
@@ -164,6 +165,25 @@ const VideoChat = (props: Props) => {
             tracks[i].enabled = !tracks[i].enabled;
         }
         socket.emit("WEBRTC_CHANGE_STATUS", { audio: localAudioActive, video: localVideoActive, id: props.match.params.id });
+    };
+
+    const hangUp = () => {
+        if (localStream) {
+            if (typeof localStream.getTracks === "undefined") {
+                // Support legacy browsers, like phantomJs we use to run tests.
+                localStream.stop();
+            } else {
+                localStream.getTracks().forEach((track: any) => {
+                    track.stop();
+                });
+            }
+            localStream = null;
+        }
+
+        if (peerConnection) {
+            peerConnection.close();
+            peerConnection = null;
+        }
     };
 
     return (

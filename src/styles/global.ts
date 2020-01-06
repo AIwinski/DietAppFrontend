@@ -26,6 +26,8 @@ export const GlobalStyle = createGlobalStyle`
     
         scroll-behavior: smooth;
 
+        max-width: 100vw;
+
     }
     body {
         overflow: overlay;

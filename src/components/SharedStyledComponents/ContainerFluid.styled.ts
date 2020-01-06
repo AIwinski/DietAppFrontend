@@ -33,4 +33,5 @@ export const ContainerFluid = styled.div<Props>`
         `}
 
     width: 100%;
+    max-width: 100vw;
 `;

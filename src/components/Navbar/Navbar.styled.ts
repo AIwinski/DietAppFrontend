@@ -34,13 +34,20 @@ export const Logo = styled.div`
 
 export const Hamburger = styled.button`
     display: none;
-    width: 2rem;
-    height: 2rem;
-    border: 1px solid red;
     background: none;
     @media (max-width: ${BREAKPOINTS.md}) {
         display: block;
     }
+    width: 2.6rem;
+    height: 2.6rem;
+    cursor: pointer;
+    padding: 0;
+    margin: 0;
+    border: none;
+    background: ${COLORS.white};
+    color: ${COLORS.blue};
+    font-size: 2.2rem;
+    outline: none;
 `;
 
 type ItemListProps = {
@@ -54,7 +61,7 @@ export const ItemList = styled.ul<ItemListProps>`
         width: 100%;
         left: 0;
         top: ${NAV_HEIGHT};
-        height: calc(100vh - ${NAV_HEIGHT});
+        max-height: calc(100vh - ${NAV_HEIGHT});
         position: absolute;
         flex-direction: column;
         justify-content: space-evenly;
@@ -87,35 +94,24 @@ export const Item = styled.li`
 export const LinkStyled = styled(Link)`
     text-decoration: none;
     color: ${COLORS.darkblue};
-    position: relative;
+    transition: color 0.1s;
 
     :link {
         color: ${COLORS.darkblue};
     }
 
-    &::before {
-        content: "";
-        position: absolute;
-        left: 0;
-        bottom: 0;
-        width: 0%;
-        height: 3px;
-        background: ${COLORS.blue};
-        z-index: 10000;
-        transition: width 0.1s;
-    }
-
-    &:hover::before {
-        width: 100%;
+    &:hover {
+        color: ${COLORS.blue2};
     }
 `
 
 export const NameBadge = styled.span`
     color: #444;
+    padding: 0 0.5rem;
 `
 
 export const AvatarAndDropdown = styled.div`
-    display: grid;
-    grid-gap: 0.5rem;
-    grid-template-columns: 1fr 1fr;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 `

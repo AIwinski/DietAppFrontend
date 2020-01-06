@@ -5,6 +5,7 @@ export const COLORS = {
     golden: "#CD9843",
     lightgray: "#EEEEEE",
     blue: "#3b95f5",
+    blue2: "#00d1a4",
     darkblue: "#277cd6"
 };
 
@@ -22,7 +23,7 @@ export const routerTransition = {
 }
 
 export const NAV_HEIGHT = "55px";
-export const NAV_MARGIN = "1.5rem";
+export const NAV_MARGIN = "0rem";
 export const NAV_HEADROOM = `calc(${NAV_HEIGHT + ' + ' + NAV_MARGIN})`
 export const CONTAINER_FLUID_GUTTER_REM = 2;
 

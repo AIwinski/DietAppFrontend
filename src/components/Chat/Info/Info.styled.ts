@@ -3,7 +3,7 @@ import { NAV_HEADROOM } from "../../../styles/variables";
 
 export const InfoStyled = styled.div`
     position: relative;
-    border: 1px solid yellow;
+    border-left: 1px solid #eee;
     min-height: calc(100vh - ${NAV_HEADROOM});
 `;
 

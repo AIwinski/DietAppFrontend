@@ -6,7 +6,7 @@ export const ListStyled = styled.div`
     overflow: auto;
     box-sizing: border-box;
     margin: 0;
-    border: 1px solid red;
+    border-right: 1px solid #ddd;
     position: relative;
 `;
 

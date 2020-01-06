@@ -4,12 +4,11 @@ import useOutsideAlerter from "../../hooks/useOutsideAlerter";
 
 type Props = {
     children?: any;
-    elements: [
-        {
-            text: string;
-            url: string;
-        }
-    ];
+    elements: {
+        text: string;
+        url?: string;
+        onclick?: () => any;
+    }[];
 };
 
 const DropdownMenu = (props: Props) => {
@@ -25,7 +24,16 @@ const DropdownMenu = (props: Props) => {
                 <List>
                     {props.elements.map((e, index) => {
                         return (
-                            <LinkElement key={index} to={e.url}>
+                            <LinkElement
+                                key={index}
+                                to={e.url}
+                                onClick={() => {
+                                    setOpened(!isOpened);
+                                    if (e.onclick) {
+                                        e.onclick();
+                                    }
+                                }}
+                            >
                                 {e.text}
                             </LinkElement>
                         );

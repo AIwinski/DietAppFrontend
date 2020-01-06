@@ -17,8 +17,7 @@ import { ApplicationState } from "../../store";
 import Avatar from "../Avatar/Avatar";
 import DropdownMenu from "../DropdownMenu/DropdownMenu";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faAngleDown } from "@fortawesome/free-solid-svg-icons";
-import { STATIC_FILES_ROOT } from "../../constants/config";
+import { faAngleDown, faBars, faTimes } from "@fortawesome/free-solid-svg-icons";
 
 type Props = ReturnType<typeof mapStateToProps> & typeof mapDispatchToProps;
 
@@ -30,45 +29,75 @@ const Navbar = (props: Props) => {
             <ContainerFluid maxheight>
                 <NavbarInner>
                     <Logo onClick={() => setMenuOpened(false)}>
-                        <LinkStyled to="/">Home</LinkStyled>
+                        <LinkStyled to="/">LOGO</LinkStyled>
                     </Logo>
-                    <Hamburger onClick={() => setMenuOpened(!menuOpened)}></Hamburger>
+                    <Hamburger onClick={() => setMenuOpened(!menuOpened)}>
+                        {menuOpened ? (
+                            <FontAwesomeIcon icon={faTimes}></FontAwesomeIcon>
+                        ) : (
+                            <FontAwesomeIcon icon={faBars}></FontAwesomeIcon>
+                        )}
+                    </Hamburger>
                     <ItemList opened={menuOpened}>
+                        <Item onClick={() => setMenuOpened(false)}>
+                            <LinkStyled to="/list">Przeglądaj profile</LinkStyled>
+                        </Item>
                         {props.isAuthenticated ? (
                             <React.Fragment>
                                 <Item onClick={() => setMenuOpened(false)}>
-                                    <button
-                                        onClick={() => {
-                                            props.logout();
-                                        }}
-                                    >
-                                        Logout
-                                    </button>
-                                </Item>
-                                <Item onClick={() => setMenuOpened(false)}>
                                     <LinkStyled to="/chat">Chat</LinkStyled>
                                 </Item>
-                                {props.currentUser.accountType === "doctor" && (
+                                {props.currentUser.accountType === "doctor" ? (
                                     <React.Fragment>
-                                        <Item onClick={() => setMenuOpened(false)}>
-                                            <LinkStyled to={"/profile/" + props.currentUser.profileId}>My profile</LinkStyled>
-                                        </Item>
                                         <Item onClick={() => setMenuOpened(false)}>
                                             <LinkStyled to={"/dashboard"}>Dashboard</LinkStyled>
                                         </Item>
+                                        <Item>
+                                            <AvatarAndDropdown>
+                                                <Avatar
+                                                    url={props.currentUser.avatar ? props.currentUser.avatar : undefined}
+                                                ></Avatar>
+                                                <NameBadge>{props.currentUser.displayName}</NameBadge>
+                                                <DropdownMenu
+                                                    elements={[
+                                                        { text: "Mój profil", url: "/profile/" + props.currentUser.profileId },
+                                                        { text: "Edytuj profil", url: "/profile-settings" },
+                                                        {
+                                                            text: "Wyloguj się",
+                                                            onclick: () => {
+                                                                props.logout();
+                                                            }
+                                                        }
+                                                    ]}
+                                                >
+                                                    <FontAwesomeIcon icon={faAngleDown}></FontAwesomeIcon>
+                                                </DropdownMenu>
+                                            </AvatarAndDropdown>
+                                        </Item>
                                     </React.Fragment>
+                                ) : (
+                                    <Item>
+                                        <AvatarAndDropdown>
+                                            <Avatar
+                                                url={props.currentUser.avatar ? props.currentUser.avatar : undefined}
+                                            ></Avatar>
+                                            <NameBadge>{props.currentUser.displayName}</NameBadge>
+                                            <DropdownMenu
+                                                elements={[
+                                                    { text: "Edytuj profil", url: "/profile-settings" },
+                                                    {
+                                                        text: "Wyloguj się",
+                                                        onclick: () => {
+                                                            props.logout();
+                                                        }
+                                                    }
+                                                ]}
+                                            >
+                                                <FontAwesomeIcon icon={faAngleDown}></FontAwesomeIcon>
+                                            </DropdownMenu>
+                                        </AvatarAndDropdown>
+                                    </Item>
                                 )}
-                                <Item>
-                                    <NameBadge>{props.currentUser.displayName}</NameBadge>
-                                </Item>
-                                <Item>
-                                    <AvatarAndDropdown>
-                                        <Avatar url={props.currentUser.avatar ? props.currentUser.avatar : undefined}></Avatar>
-                                        <DropdownMenu elements={[{ text: "Chat", url: "/chat" }]}>
-                                            <FontAwesomeIcon icon={faAngleDown}></FontAwesomeIcon>
-                                        </DropdownMenu>
-                                    </AvatarAndDropdown>
-                                </Item>
                             </React.Fragment>
                         ) : (
                             <React.Fragment>
@@ -80,9 +109,6 @@ const Navbar = (props: Props) => {
                                 </Item>
                             </React.Fragment>
                         )}
-                        <Item onClick={() => setMenuOpened(false)}>
-                            <LinkStyled to="/list">Profile List</LinkStyled>
-                        </Item>
                     </ItemList>
                 </NavbarInner>
             </ContainerFluid>

@@ -2,7 +2,6 @@ import styled from "styled-components";
 import { COLORS } from "../../styles/variables";
 
 export const Form = styled.form`
-    margin: 1rem;
     position: relative;
 `;
 
@@ -15,13 +14,14 @@ export const Input = styled.input<InputProps>`
     width: 100%;
     box-sizing: border-box;
     border-radius: 20px;
-    border: 1px solid ${COLORS.lightgray};
+    border: 2px solid ${COLORS.blue};
     height: 40px;
     ${props =>
         props.formHasResults &&
         `
     border-bottom-left-radius: 0px;
             border-bottom-right-radius: 0px;`}
+            outline: none;
 `;
 
 export const ResultsContainer = styled.div`
@@ -40,7 +40,7 @@ export type ResultsElementProps = {
 export const ResultsElement = styled.div<ResultsElementProps>`
     box-sizing: border-box;
     padding: 1rem;
-    background: ${props => (!props.selected ? COLORS.white : COLORS.lightgray)};
+    background: ${props => (!props.selected ? "#eef" : COLORS.blue)};
 
     &:last-of-type {
         border-bottom-left-radius: 20px;

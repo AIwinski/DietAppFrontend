@@ -69,7 +69,9 @@ const DebouncedSearchInput = (props: Props) => {
     const onFormSubmit = (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         setFocused(false);
-        props.callback(results[selected].id);
+        if (results[selected]) {
+            props.callback(results[selected].id);
+        }
     };
 
     const onFocus = () => {

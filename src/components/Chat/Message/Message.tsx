@@ -19,7 +19,7 @@ const Message = (props: Props) => {
     const { isReceived, type, text, date, srcPath, id, initialFileName } = props;
 
     const downloadFile = (id: string) => {
-        ChatApi.getFile(id, initialFileName)
+        ChatApi.getFile(id)
             .then(res => {
                 saveAs(res.data, initialFileName);
                 console.log(res);

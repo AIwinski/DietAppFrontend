@@ -113,7 +113,7 @@ const Chat = {
     },
     getConversations: () => requests.get("/chat/conversations"),
     getMessages: (data: GetMessagesProps) => requests.get("/chat/conversations/" + encodeURIComponent(data.conversationId) + "?qty=" + encodeURIComponent(data.qty) + "&offset=" + encodeURIComponent(data.offset)),
-    getFile: (id: string, fileName: string) => requests.get("/upload/file/" + id, { responseType: 'blob', headers: { "Content-Disposition": `attachment; filename="${fileName}"` } }),
+    getFile: (id: string) => requests.get("/upload/file/" + id),
 }
 
 export interface SendMessageProps {
@@ -177,7 +177,10 @@ const Profile = {
     updateProfileData: (data: UpdateProfileDataProps, id: string) => requests.put('/profile/' + id, data),
     updateUserData: (data: any) => requests.put("/profile/user", data),
     addReview: (data: any) => requests.post("/profile/review", data),
-    search: (phrase: string) => requests.get('/profile/search/' + phrase)
+    search: (phrase: string) => requests.get('/profile/search/' + phrase),
+    count: () => requests.get("/profile/count"),
+    mostRecent: () => requests.get("/profile/most-recent"),
+    getReport: (days: number, profileId: string) => requests.get("/profile/report?profile=" + profileId + "&days=" + days)
 };
 
 export { socket, Auth, Chat, Profile };

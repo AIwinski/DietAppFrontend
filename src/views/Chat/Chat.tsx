@@ -1,5 +1,13 @@
-import React, { useState, useEffect } from "react";
-import { ChatStyled, ConversationWrapper, ChatWindow, ChatFormWrapper, ChatInfoWrapper, NewMessageBadge, NoMessagesBadge } from "./Chat.styled";
+import React, { useState, useEffect, useRef } from "react";
+import {
+    ChatStyled,
+    ConversationWrapper,
+    ChatWindow,
+    ChatFormWrapper,
+    ChatInfoWrapper,
+    NewMessageBadge,
+    NoMessagesBadge
+} from "./Chat.styled";
 import List from "../../components/Chat/List/List";
 import Info from "../../components/Chat/Info/Info";
 import Form from "../../components/Chat/Form/Form";
@@ -29,7 +37,9 @@ const Chat = (props: Props) => {
     const [newConversationUserId, setNewConversationUserId] = useState(
         props.location && props.location.state ? props.location.state.newConversationUserId : undefined
     );
-    const [isLoadingConversations, setIsLoadingConversations] = useState(true); 
+    const [isLoadingConversations, setIsLoadingConversations] = useState(true);
+
+    const chatWindowRef = useRef(null);
 
     useEffect(() => {
         fetchConversations();
@@ -51,14 +61,14 @@ const Chat = (props: Props) => {
     useEffect(() => {
         if (newConversationUserId) {
             let index = getConversationIndexByUserId(conversations, newConversationUserId);
-            console.log(index)
+            console.log(index);
             if (index !== -1) {
                 changeActiveConversation(conversations[index].id);
             }
         } else {
             if (activeConversationId) {
                 let index = conversations.findIndex((c: any) => c.id === activeConversationId);
-                console.log(index)
+                console.log(index);
                 if (index !== -1) {
                     changeActiveConversation(conversations[index].id);
                 } else {
@@ -80,17 +90,18 @@ const Chat = (props: Props) => {
 
     const updateMessages = (data: any) => {
         if (data.createdNewConversation) {
-            console.log(conversations)
+            console.log(conversations);
             setConversations([...conversations, data.newConversation]);
         }
         if (activeConversationId == String(data.message.conversationId)) {
             setActiveConversationMessages([...activeConversationMessages, data.message]);
+            scrollToBottomOfChatWindow();
         }
     };
 
     const getConversationIndexByUserId = (conversations: any[], userId: string) => {
         let result = -1;
-        
+
         conversations.forEach((c: any, index: number) => {
             if (c.users.length > 1) {
                 c.users.forEach((u: any) => {
@@ -98,12 +109,16 @@ const Chat = (props: Props) => {
                         result = index;
                     }
                 });
-            } else if (c.users.length === 1 && String(c.users[0].id) === String(props.currentUser.id) && String(c.users[0].id) === String(userId)) {
+            } else if (
+                c.users.length === 1 &&
+                String(c.users[0].id) === String(props.currentUser.id) &&
+                String(c.users[0].id) === String(userId)
+            ) {
                 result = index;
             }
         });
-        console.log(conversations)
-        console.log(result)
+        console.log(conversations);
+        console.log(result);
         return result;
     };
 
@@ -111,7 +126,7 @@ const Chat = (props: Props) => {
         ChatApi.getConversations()
             .then((res: any) => {
                 setConversations(res.data.conversations);
-                setIsLoadingConversations(false)
+                setIsLoadingConversations(false);
             })
             .catch((err: any) => {
                 console.error(err);
@@ -147,6 +162,7 @@ const Chat = (props: Props) => {
         ChatApi.getMessages(getMessagesProps)
             .then((res: any) => {
                 setActiveConversationMessages([...loadedMessages, ...res.data.messages]);
+                scrollToBottomOfChatWindow();
             })
             .catch((err: any) => {
                 console.error(err);
@@ -183,7 +199,7 @@ const Chat = (props: Props) => {
                     accountType: c.users[0].accountType,
                     email: c.users[0].email,
                     avatar: c.users[0].avatar,
-                    userId: c.users[0].id,
+                    userId: c.users[0].id
                 };
             } else if (c.users.length > 1) {
                 let u = c.users.find((u: any) => String(u.id) !== String(props.currentUser.id));
@@ -204,6 +220,13 @@ const Chat = (props: Props) => {
         setActiveConversationInfo(data);
     };
 
+    const scrollToBottomOfChatWindow = () => {
+        if (chatWindowRef) {
+            // @ts-ignore
+            chatWindowRef.current.scrollTop = chatWindowRef.current.scrollHeight;
+        }
+    };
+
     return (
         <ChatStyled>
             <List
@@ -211,7 +234,7 @@ const Chat = (props: Props) => {
                 onElementClick={onConversationClick}
             />
             <ConversationWrapper>
-                <ChatWindow>
+                <ChatWindow ref={chatWindowRef}>
                     {newConversationUserId ? (
                         <NewMessageBadge>new conversation: {newConversationUserId}</NewMessageBadge>
                     ) : activeConversationMessages !== undefined ? (
