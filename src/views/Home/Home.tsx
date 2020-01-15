@@ -126,7 +126,6 @@ const Home = (props: Props) => {
                     {mostRecent !== undefined ? (
                         <PopularProfilesInner>
                             {mostRecent.map((mr: any) => {
-                                console.log(mr);
                                 return (
                                     <PopularProfilesCard>
                                         <Avatar url={mr.owner.avatar}></Avatar>

@@ -180,7 +180,22 @@ const Profile = {
     search: (phrase: string) => requests.get('/profile/search/' + phrase),
     count: () => requests.get("/profile/count"),
     mostRecent: () => requests.get("/profile/most-recent"),
-    getReport: (days: number, profileId: string) => requests.get("/profile/report?profile=" + profileId + "&days=" + days)
+    getReport: (days: number, profileId: string) => requests.get("/profile/report?profile=" + profileId + "&days=" + days),
+    getUser: (id: string) => requests.get("/user/" + id)
 };
 
-export { socket, Auth, Chat, Profile };
+const Patient = {
+    getPatients: () => requests.get("/patient"),
+    getPatient: (id: string) => requests.get("/patient/" + id),
+    addPatient: (data: any) => requests.post("/patient", data),
+    addNote: (data: any) => requests.post("/patient/note", data),
+    deleteNote: (id: string) => requests.delete("/patient/note/" + id),
+    getNotes: (patientId?: string) => requests.get("/patient/note" + (patientId ? ("/" + patientId) : "")),
+    getDataSets: (patientId: string) => requests.get("/patient/data-set/" + patientId),
+    addDataSet: (patientId: string, data: any) => requests.post("/patient/data-set/" + patientId, data),
+    removeDataSet: (dataSetId: string) => requests.delete("/patient/data-set/" + dataSetId),
+    addDataValue: (data: any) => requests.post("/patient/data-value", data),
+    deleteDataValue: (id: string) => requests.delete("/patient/data-value/" + id)
+}
+
+export { socket, Auth, Chat, Profile, Patient };

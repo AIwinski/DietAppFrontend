@@ -25,6 +25,8 @@ const ProfileSettings = lazy(() => import("../../views/ProfileSettings/ProfileSe
 const Dashboard = lazy(() => import("../../views/Dashboard/Dashboard"));
 const VideoChat = lazy(() => import("../../views/VideoChat/VideoChat"));
 const NotFound = lazy(() => import("../../views/NotFound/NotFound"));
+const AddPatient = lazy(() => import("../../views/AddPatient/AddPatient"));
+const PatientDetails = lazy(() => import("../../views/PatientDetails/PatientDetails"));
 
 const App = () => {
     return (
@@ -48,6 +50,8 @@ const App = () => {
                                 <Route path="/dashboard" component={Dashboard} />
                                 <Route path="/video/:id" component={VideoChat} />
                                 <Route path="/not-found" component={NotFound} />
+                                <Route path="/add-patient" component={AddPatient} />
+                                <Route path="/patient-details/:id" component={PatientDetails} />
                                 <Redirect to={{ pathname: "/not-found" }} />
                             </AnimatedSwitch>
                         </React.Fragment>
