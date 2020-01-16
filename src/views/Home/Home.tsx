@@ -125,9 +125,9 @@ const Home = (props: Props) => {
                     <SectionTitle>Ostatnio dodane profile</SectionTitle>
                     {mostRecent !== undefined ? (
                         <PopularProfilesInner>
-                            {mostRecent.map((mr: any) => {
+                            {mostRecent.map((mr: any, index: any) => {
                                 return (
-                                    <PopularProfilesCard>
+                                    <PopularProfilesCard key={index}>
                                         <Avatar url={mr.owner.avatar}></Avatar>
                                         <PopularProfilesCardName>{mr.owner.displayName}</PopularProfilesCardName>
                                         <Rating rating={mr.totalRating} numberOfRatings={mr.ratings.length}></Rating>

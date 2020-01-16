@@ -1,21 +1,16 @@
-// const {
-//     getLoader,
-//     injectBabelPlugin
-// } = require("react-app-rewired");
-// const tsImportPluginFactory = require('ts-import-plugin')
+const WorkboxWebpackPlugin = require('workbox-webpack-plugin');
 
 module.exports = function override(config, env) {
-    // const tsLoader = getLoader(
-    //     config.module.rules,
-    //     rule =>
-    //         rule.loader &&
-    //         typeof rule.loader === 'string' &&
-    //         rule.loader.includes('ts-loader')
-    // );
+  config.plugins = config.plugins.map(plugin => {
+    if (plugin.constructor.name === 'GenerateSW') {
+      return new WorkboxWebpackPlugin.InjectManifest({
+        swSrc: './src/sw.js',
+        swDest: 'service-worker.js',
+      });
+    }
 
-    return config;
+    return plugin;
+  });
+
+  return config;
 };
-
-
-
-

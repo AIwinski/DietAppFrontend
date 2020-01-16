@@ -47,3 +47,36 @@ export const Age = styled.div`
 export const Gender = styled.div`
 
 `
+
+export const DataSetWrapper = styled.div`
+    border: 1px solid red;
+    padding: 1rem;
+`
+
+export const DataSetInner = styled.div`
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-gap: 1rem;
+    border: 1px solid red;
+    padding: 1rem;
+`
+
+export const DataSetsContainer = styled.div`
+    border: 1px solid red;
+    padding: 1rem;
+`
+
+export const DataSetTableWrapper = styled.div`
+    border: 1px solid red;
+    padding: 1rem;
+`
+
+export const DataSetChartWrapper = styled.div`
+    border: 1px solid red;
+    padding: 1rem;
+`
+
+export const DataSetFormWrapper = styled.div`
+    border: 1px solid red;
+    padding: 1rem;
+`
