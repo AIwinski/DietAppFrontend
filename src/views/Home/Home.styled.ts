@@ -114,8 +114,9 @@ export const PopularProfilesInner = styled.div`
 `
 
 export const SectionTitle = styled.div`
-    color: ${COLORS.blue};
+    color: ${COLORS.darkblue};
     padding: 1rem 0;
+    padding-left: 1rem;
     font-size: 2rem;
 `
 

@@ -144,4 +144,3 @@ export const FormInfoContainer = styled.div`
     position: relative;
     padding-bottom: 1rem;
 `
-

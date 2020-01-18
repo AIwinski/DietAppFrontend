@@ -15,7 +15,7 @@ const NoteForm = (props: Props) => {
             initialValues={{
                 content: ""
             }}
-            onSubmit={values => {
+            onSubmit={(values, { setFieldValue }) => {
                 console.log(values);
                 Patient.addNote({
                     ...values,
@@ -23,7 +23,8 @@ const NoteForm = (props: Props) => {
                 })
                     .then(res => {
                         console.log(res);
-                        props.onNoteAdd(res.data.note)
+                        props.onNoteAdd(res.data.note);
+                        setFieldValue("content", "");
                     })
                     .catch(err => {
                         console.log(err);
@@ -35,8 +36,9 @@ const NoteForm = (props: Props) => {
                         <LabelStyled htmlFor="content">Notatka</LabelStyled>
                         <FieldStyled name="content" placeholder="Notatka..." id="content" />
                     </FormGroup>
-
-                    <SubmitButton type="submit">Dodaj notatkę</SubmitButton>
+                    <FormGroup>
+                        <SubmitButton type="submit">Dodaj notatkę</SubmitButton>
+                    </FormGroup>
                 </NoteFormStyled>
             )}
         />

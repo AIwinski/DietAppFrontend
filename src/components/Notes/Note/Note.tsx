@@ -1,6 +1,7 @@
 import React from "react";
-import { NoteStyled, DateBadge, Content, DeleteButton } from "./Note.styled";
+import { NoteStyled, DateBadge, Content, DeleteButton, Container } from "./Note.styled";
 import { Patient } from "../../../api";
+import moment from "moment";
 
 type Props = {
     createdAt: any;
@@ -21,9 +22,12 @@ const Note = (props: Props) => {
     };
     return (
         <NoteStyled>
-            <DateBadge>{props.createdAt}</DateBadge>
+            <Container>
+                <DateBadge>{moment.utc(props.createdAt).local().format("DD-MM-YYYY HH:mm")}</DateBadge>
+                <DeleteButton onClick={() => onDelete(props.id)}>x</DeleteButton>
+            </Container>
+
             <Content>{props.content}</Content>
-            <DeleteButton onClick={() => onDelete(props.id)}>X</DeleteButton>
         </NoteStyled>
     );
 };
