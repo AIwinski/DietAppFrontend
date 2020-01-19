@@ -20,6 +20,7 @@ export const ContactButton = styled(Link)`
     padding: 0.5rem;
     display: inline-block;
     width: 100px;
+    text-align: center;
 `
 
 export const MainWrapper = styled.div`

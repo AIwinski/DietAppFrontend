@@ -91,7 +91,7 @@ const Dashboard = (props: Props) => {
                         <SectionTitle>Liczba wejść na profil w ciągu ostatnich 30 dni</SectionTitle>
                         {report.length ? (
                             <ResponsiveContainer width="100%" height={300}>
-                                <LineChart data={report} margin={{ top: 5, right: 0, left: 0, bottom: 5 }}>
+                                <LineChart data={report.reverse()} margin={{ top: 5, right: 0, left: 0, bottom: 5 }}>
                                     <Line type="monotone" dataKey="summary" />
                                     <XAxis dataKey="day" />
                                     <YAxis />

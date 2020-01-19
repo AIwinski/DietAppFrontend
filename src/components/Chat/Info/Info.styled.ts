@@ -1,11 +1,15 @@
 import styled from "styled-components";
-import { NAV_HEADROOM } from "../../../styles/variables";
+import { NAV_HEADROOM, BREAKPOINTS } from "../../../styles/variables";
 
 export const InfoStyled = styled.div`
     position: relative;
     border-left: 1px solid #eee;
     min-height: calc(100vh - ${NAV_HEADROOM});
     padding: 0.5rem;
+
+    @media (max-width: ${BREAKPOINTS.md}) {
+        min-height: auto;
+    }
 `;
 
 export const Name = styled.div`

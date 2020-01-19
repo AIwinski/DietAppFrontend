@@ -45,10 +45,10 @@ const AddDataSet = (props: Props) => {
                         <LabelStyled htmlFor="unit">Jednostka</LabelStyled>
                         <FieldStyled name="unit" placeholder="Jednostka..." id="unit" />
                     </FormGroup>
-                    <FormGroup>
+                    {/* <FormGroup>
                         <LabelStyled htmlFor="dataType">Typ danych</LabelStyled>
                         <FieldStyled name="dataType" placeholder="Typ danych..." id="dataType" />
-                    </FormGroup>
+                    </FormGroup> */}
 
                     <SubmitButton type="submit">Dodaj zbiór danych</SubmitButton>
                 </AddDataSetStyled>

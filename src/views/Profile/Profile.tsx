@@ -81,7 +81,7 @@ const Profile = (props: Props) => {
                                     <AvatarImage>
                                         <Avatar
                                             isFull={true}
-                                            url={profile.avatar ? props.currentUser.avatar : undefined}
+                                            url={profile.owner.avatar}
                                         ></Avatar>
                                     </AvatarImage>
                                     <GeneralInfo>
@@ -90,7 +90,7 @@ const Profile = (props: Props) => {
                                         <ContactButton
                                             to={{ pathname: "/chat", state: { newConversationUserId: profile.ownerId } }}
                                         >
-                                            Contact me
+                                            Chat
                                         </ContactButton>
                                     </GeneralInfo>
                                     <MainRating>
@@ -103,7 +103,7 @@ const Profile = (props: Props) => {
                                 {profile.descr ? (
                                     <Description>{profile.descr}</Description>
                                 ) : (
-                                    <ElementMissingInfo>Ten profil nie ma jeszcze cennika</ElementMissingInfo>
+                                    <ElementMissingInfo>Ten profil nie ma jeszcze opisu</ElementMissingInfo>
                                 )}
                             </ProfileSection>
                             <ProfileSection>

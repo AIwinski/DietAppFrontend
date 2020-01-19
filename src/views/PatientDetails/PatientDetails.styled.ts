@@ -17,6 +17,9 @@ export const PatientInfo = styled.div`
     flex-direction: row;
     justify-content: space-between;
     width: 100%;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    margin: 1rem 0;
 `
 
 export const ImageWrapper = styled.div`
@@ -25,7 +28,13 @@ export const ImageWrapper = styled.div`
 `
 
 export const PatientInfoInner = styled.div`
-
+    height: 16rem;
+    display: flex;
+    justify-content: space-between;
+    flex-direction: column;
+    align-items: flex-start;
+    width: 100%;
+    padding: 0.5rem;
 `
 
 export const InfoBadge = styled.div`
@@ -47,6 +56,10 @@ export const Age = styled.div`
 `
 
 export const Gender = styled.div`
+
+`
+
+export const TherapyGoal = styled.div`
 
 `
 

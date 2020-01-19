@@ -25,7 +25,8 @@ import {
     DataSetTitle,
     DataSetDescription,
     DataSetUnit,
-    DeleteDataSet
+    DeleteDataSet,
+    TherapyGoal
 } from "./PatientDetails.styled";
 import { ContainerFluid } from "../../components/SharedStyledComponents/ContainerFluid.styled";
 import { Patient } from "../../api";
@@ -193,11 +194,11 @@ const PatientDetails = (props: Props) => {
                                         <ContactButton
                                             to={{ pathname: "/chat", state: { newConversationUserId: patient.userAccount.id } }}
                                         >
-                                            Contact me
+                                            Chat
                                         </ContactButton>
                                     </UserExistInfo>
                                 ) : (
-                                    <UserDoesNotExistInfo>User does not</UserDoesNotExistInfo>
+                                    <UserDoesNotExistInfo>Ten pacjent nie jest powiązany z kontem w tej aplikacji</UserDoesNotExistInfo>
                                 )}
                             </InfoBadge>
                             <PatientInfo>
@@ -205,9 +206,10 @@ const PatientDetails = (props: Props) => {
                                     <Avatar isFull={true}></Avatar>
                                 </ImageWrapper>
                                 <PatientInfoInner>
-                                    <Name>{patient.firstName + " " + patient.lastName}</Name>
-                                    <Age>{patient.age}</Age>
-                                    <Gender>{patient.gender}</Gender>
+                                    <Name>Imię i nazwisko: {patient.firstName + " " + patient.lastName}</Name>
+                                    <Age>Wiek: {patient.age}</Age>
+                                    <Gender>Płeć: {patient.gender}</Gender>
+                                    <TherapyGoal>Cel terapii: {patient.therapyGoal}</TherapyGoal>
                                 </PatientInfoInner>
                             </PatientInfo>
                         </React.Fragment>

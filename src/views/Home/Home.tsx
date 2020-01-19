@@ -22,7 +22,8 @@ import {
     PopularProfilesCard,
     SectionTitle,
     PopularProfilesCardName,
-    PopularProfilesCardCity
+    PopularProfilesCardCity,
+    LogSection
 } from "./Home.styled";
 import { ContainerFluid } from "../../components/SharedStyledComponents/ContainerFluid.styled";
 import { ApplicationState } from "../../store";
@@ -32,6 +33,7 @@ import Loader from "../../components/Loader/Loader";
 import Avatar from "../../components/Avatar/Avatar";
 import { LinkStyled } from "../../components/Navbar/Navbar.styled";
 import Rating from "../../components/Rating/Rating";
+import Footer from "../../components/Footer/Footer";
 
 type Props = {} & ReturnType<typeof mapStateToProps> & typeof mapDispatchToProps;
 
@@ -121,6 +123,15 @@ const Home = (props: Props) => {
                         </InfoCardText>
                     </InfoCard>
                 </InfoSection>
+
+                {props.isAuthenticated ? null : (
+                    <LogSection>
+                        <LinkStyled to="/register">Nie masz jeszcze konta? Załóż je teraz!</LinkStyled>
+                        <br />
+                        <LinkStyled to="/login">Masz już konto? Zaloguj się!</LinkStyled>
+                    </LogSection>
+                )}
+
                 <PopularProfiles>
                     <SectionTitle>Ostatnio dodane profile</SectionTitle>
                     {mostRecent !== undefined ? (
@@ -141,22 +152,8 @@ const Home = (props: Props) => {
                         <Loader></Loader>
                     )}
                 </PopularProfiles>
-                <div>
-                    {props.isAuthenticated ? (
-                        <LoggedInBadge>Zalogowano jako: {props.currentUser.displayName}</LoggedInBadge>
-                    ) : (
-                        <React.Fragment>
-                            <Link to="/register" className="hero__link">
-                                Nie masz jeszcze konta? Załóż je teraz!
-                            </Link>
-                            <br />
-                            <Link to="/login" className="hero__link">
-                                Masz już konto? Zaloguj się!
-                            </Link>
-                        </React.Fragment>
-                    )}
-                </div>
             </ContainerFluid>
+            <Footer></Footer>
         </HomePageStyled>
     );
 };

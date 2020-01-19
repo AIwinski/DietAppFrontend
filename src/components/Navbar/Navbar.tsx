@@ -50,7 +50,7 @@ const Navbar = (props: Props) => {
                                 {props.currentUser.accountType === "doctor" ? (
                                     <React.Fragment>
                                         <Item onClick={() => setMenuOpened(false)}>
-                                            <LinkStyled to={"/dashboard"}>Dashboard</LinkStyled>
+                                            <LinkStyled to={"/dashboard"}>Panel</LinkStyled>
                                         </Item>
                                         <Item>
                                             <AvatarAndDropdown>
@@ -102,10 +102,10 @@ const Navbar = (props: Props) => {
                         ) : (
                             <React.Fragment>
                                 <Item onClick={() => setMenuOpened(false)}>
-                                    <LinkStyled to="/login">Login</LinkStyled>
+                                    <LinkStyled to="/login">Logowanie</LinkStyled>
                                 </Item>
                                 <Item onClick={() => setMenuOpened(false)}>
-                                    <LinkStyled to="/register">Register</LinkStyled>
+                                    <LinkStyled to="/register">Rejestracja</LinkStyled>
                                 </Item>
                             </React.Fragment>
                         )}

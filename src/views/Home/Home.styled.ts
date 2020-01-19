@@ -141,3 +141,8 @@ export const PopularProfilesCardCity = styled.div`
     font-size: 1.4rem;
     padding-bottom: 1rem;
 `
+
+export const LogSection = styled.div`
+    padding: 2rem 0;
+    border-top: 1px solid #ddd;
+`
