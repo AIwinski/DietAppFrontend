@@ -30,12 +30,12 @@ const RatingInput = (props: Props) => {
     }
     return (
         <RatingStyled>
-            <div>
+            <div style={{ cursor: "pointer" }}>
                 {stars.map(s => {
                     return s;
                 })}
             </div>
-            <RatingValue>{value}</RatingValue>
+            <RatingValue>{value.toFixed(1)}</RatingValue>
         </RatingStyled>
     );
 };

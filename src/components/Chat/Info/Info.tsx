@@ -1,5 +1,5 @@
 import React from "react";
-import { InfoStyled, InfoWrapper, Name, NoInfo, Email, AccountType } from "./Info.styled";
+import { InfoStyled, InfoWrapper, Name, NoInfo, Email, AccountType, Container } from "./Info.styled";
 import Avatar from "../../Avatar/Avatar";
 import { LinkStyled } from "../../Navbar/Navbar.styled";
 import PatientButton from "../../PatientButton/PatientButton";
@@ -22,12 +22,13 @@ const Info = (props: Props) => {
         <InfoStyled>
             {info ? (
                 <InfoWrapper>
-                    <Avatar url={info.avatar}></Avatar>
-                    <Name>{info.displayName}</Name>
-                    <Email>{info.email}</Email>
-                    <AccountType>{info.accountType}</AccountType>
-                    {info.userId}
-                    <LinkStyled to={"/video/" + info.userId}>video chat</LinkStyled>
+                    <Container>
+                        <Avatar url={info.avatar}></Avatar>
+                        <Name>{info.displayName}</Name>
+                    </Container>
+                    <Email>Email: {info.email}</Email>
+                    <AccountType>Typ konta: {info.accountType === "doctor" ? "lekarz" : "pacjent"}</AccountType>
+                    <LinkStyled to={"/video/" + info.userId}>Chat video</LinkStyled>
                     {info.accountType === "patient" && <PatientButton userAccountId={info.userId}></PatientButton>}
                 </InfoWrapper>
             ) : (

@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { COLORS } from '../../styles/variables';
+import { COLORS, BREAKPOINTS } from '../../styles/variables';
 
 type CardStyledProps = {
     isPremium: boolean
@@ -9,7 +9,7 @@ export const CardStyled = styled.div<CardStyledProps>`
     padding: 1rem;
     margin: 0.5rem;
     /* border: 1px solid ${props => props.isPremium ? COLORS.golden : COLORS.lightgray}; */
-    border: 1px solid red;
+    border: 1px solid #ddd;
     border-radius: 4px;
     display: flex;
     flex-direction: row;
@@ -21,11 +21,24 @@ export const CardStyled = styled.div<CardStyledProps>`
     box-shadow: 0px 1px 10px 1px rgba(0, 0, 0, 0.15);
 
     height: 18rem;
+
+    @media (max-width: ${BREAKPOINTS.md}) {
+        height: 22rem;
+    }
+
+    :hover {
+        background: #f6f6f6;
+    }
 `
 
 export const CardImageWrapper = styled.div`
     width: 16rem;
     height: 16rem;
+
+    @media (max-width: ${BREAKPOINTS.md}) {
+        width: 10rem;
+        height: 10rem;
+    }
 `
 
 export const CardContent = styled.div`
@@ -33,6 +46,10 @@ export const CardContent = styled.div`
         flex-direction: row;
         justify-content: space-between;
         width: 100%;
+
+        @media (max-width: ${BREAKPOINTS.md}) {
+            flex-direction: column;
+        }
 `
 
 export const CardContentLeft = styled.div`
@@ -40,10 +57,15 @@ export const CardContentLeft = styled.div`
 `
 
 export const CardContentRight = styled.div`
-display: flex;
+        display: flex;
         flex-direction: column;
         justify-content: space-between;
         align-items: flex-end;
+
+        @media (max-width: ${BREAKPOINTS.md}) {
+            flex-direction: row;
+            align-items: flex-start;
+        }
 `
 
 export const CardName = styled.span`

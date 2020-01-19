@@ -3,11 +3,10 @@ import { COLORS } from '../../styles/variables'
 import { Link } from "react-router-dom"
 
 export const ProfileStyled = styled.div`
-    border: 1px solid red;
+    padding-top: 1rem;
 `
 
 export const AlertStyled = styled.div`
-    border: 1px solid red;
     padding: 1rem;
     border-radius: 5px;
 `

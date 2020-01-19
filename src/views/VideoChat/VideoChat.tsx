@@ -40,14 +40,12 @@ const VideoChat = (props: Props) => {
         });
 
         socket.on("WEBRTC_STATUS_CHANGED", (data: any) => {
-            if (String(data.id) !== String(props.currentUser.id))  {
-                setRemoteAudioActive(data.audio);
-                setRemoteVideoActive(data.video);
-            }
+            setRemoteAudioActive(data.audio);
+            setRemoteVideoActive(data.video);
         });
 
         socket.on("WEBRTC_JOINED", (data: any) => {
-            if (String(data.id) !== String(props.currentUser.id)) setRemoteInRoom(true);
+            setRemoteInRoom(true);
         });
 
         socket.on("WEBRTC_LEFT", () => {

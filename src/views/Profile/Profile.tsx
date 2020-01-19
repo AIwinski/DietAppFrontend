@@ -29,6 +29,7 @@ import BarLoader from "../../components/BarLoader/BarLoader";
 import Avatar from "../../components/Avatar/Avatar";
 import ReviewForm from "../../components/ReviewForm/ReviewForm";
 import Gallery from "../../components/Gallery/Gallery/Gallery";
+import Footer from "../../components/Footer/Footer";
 
 interface MatchParams {
     id: string;
@@ -64,13 +65,13 @@ const Profile = (props: Props) => {
     return (
         <ProfileStyled>
             <ContainerFluid>
-                {props.currentUser.profileId == id && profile && (profile.accountCompletionRate < MIN_COMPLETION_RATE) && (
+                {/* {props.currentUser.profileId == id && profile && (profile.accountCompletionRate < MIN_COMPLETION_RATE) && (
                     <AlertStyled>
                         Twój profil nie jest w pełni wypełniony przez co nie bedzie widoczny na liście profili. &nbsp;Uzupełnij go
                         tutaj:
                         <Link to="/profile-settings">Edit profile</Link>
                     </AlertStyled>
-                )}
+                )} */}
                 {profile ? (
                     <React.Fragment>
                         <React.Fragment>
@@ -143,6 +144,7 @@ const Profile = (props: Props) => {
                     <BarLoader></BarLoader>
                 )}
             </ContainerFluid>
+            <Footer></Footer>
         </ProfileStyled>
     );
 };

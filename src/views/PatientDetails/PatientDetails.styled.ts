@@ -29,7 +29,9 @@ export const PatientInfoInner = styled.div`
 `
 
 export const InfoBadge = styled.div`
-
+    padding: 0.5rem;
+    border: 1px solid #ddd;
+    border-radius: 6px;
 `
 
 export const UserExistInfo = styled.div`
@@ -60,6 +62,11 @@ export const DataSetInner = styled.div`
     grid-gap: 0.5rem;
     margin-bottom: 0.5rem;
     
+`
+
+export const DeleteDataSet = styled.div`
+    color: red;
+    cursor: pointer;
 `
 
 export const DataSetsContainer = styled.div`
@@ -113,6 +120,9 @@ export const DataSetInfo = styled.div`
     grid-template-columns: 1fr 1fr;
     padding: 0.5rem;
     grid-gap: 0.5rem;
+    border: 1px solid #ccc;
+    margin-bottom: 1rem;
+    border-radius: 6px;
 `
 
 export const DataSetDescription = styled.div`

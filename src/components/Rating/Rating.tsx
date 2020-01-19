@@ -13,7 +13,7 @@ const defaultProps = {
 
 const Rating = (props: Props) => {
     const { rating, numberOfRatings, minValue, maxValue } = props;
-    const roundedRating = Math.round(rating);
+    const roundedRating = Math.round(rating * 10) / 10;
     let stars = [];
     for (let i = minValue; i < maxValue + 1; i++) {
         stars.push(
@@ -25,7 +25,7 @@ const Rating = (props: Props) => {
     return (
         <RatingStyled>
             <RatingValue>
-                {roundedRating.toFixed(1)} / {maxValue}
+                {roundedRating.toFixed(1)} / {maxValue.toFixed(1)}
             </RatingValue>
             <div>
                 {stars.map(s => {

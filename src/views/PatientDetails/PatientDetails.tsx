@@ -24,13 +24,14 @@ import {
     DataSetInfo,
     DataSetTitle,
     DataSetDescription,
-    DataSetUnit
+    DataSetUnit,
+    DeleteDataSet
 } from "./PatientDetails.styled";
 import { ContainerFluid } from "../../components/SharedStyledComponents/ContainerFluid.styled";
 import { Patient } from "../../api";
 import { RouteComponentProps } from "react-router-dom";
 import Avatar from "../../components/Avatar/Avatar";
-import { Name } from "../Profile/Profile.styled";
+import { Name, ContactButton } from "../Profile/Profile.styled";
 import Loader from "../../components/Loader/Loader";
 import AddDataSet from "../../components/PatientData/AddDataSet/AddDataSet";
 import AddData from "../../components/PatientData/AddData/AddData";
@@ -40,6 +41,7 @@ import { ResponsiveContainer, LineChart, Line, XAxis, YAxis } from "recharts";
 import { SectionTitle } from "../Home/Home.styled";
 import { Container } from "../Dashboard/Dashboard.styled";
 import { SubmitButton } from "../../components/SharedStyledComponents/Form.styled";
+import { LinkStyled } from "../../components/Navbar/Navbar.styled";
 
 interface MatchParams {
     id: string;
@@ -115,7 +117,7 @@ const PatientDetails = (props: Props) => {
 
     const onDataSetAdd = (data: any) => {
         setDataSets([...dataSets, data]);
-        setDataSetShown(false)
+        setDataSetShown(false);
     };
 
     const onDataSetDelete = (id: string) => {
@@ -125,9 +127,9 @@ const PatientDetails = (props: Props) => {
                 dsCopy.findIndex(ds => ds.dataSet.id === id),
                 1
             );
-            setDataSets(dsCopy)
-        })
-    }
+            setDataSets(dsCopy);
+        });
+    };
 
     const onDataValueAdd = (dataSetId: string, data: any) => {
         const dsCopy: any[] = JSON.parse(JSON.stringify(dataSets));
@@ -180,13 +182,20 @@ const PatientDetails = (props: Props) => {
         <PatientDetailsStyled>
             <ContainerFluid>
                 <PatientDetailsStyledInner>
-                    <PageTitle>Szczegóły pacjenta</PageTitle>
+                    <SectionTitle>Szczegóły pacjenta</SectionTitle>
 
                     {!isPatientFetching && patient ? (
                         <React.Fragment>
                             <InfoBadge>
                                 {patient.userAccount ? (
-                                    <UserExistInfo>User istnieje</UserExistInfo>
+                                    <UserExistInfo>
+                                        <div>Użytkownik jest zarejestrowany w systemie</div>
+                                        <ContactButton
+                                            to={{ pathname: "/chat", state: { newConversationUserId: patient.userAccount.id } }}
+                                        >
+                                            Contact me
+                                        </ContactButton>
+                                    </UserExistInfo>
                                 ) : (
                                     <UserDoesNotExistInfo>User does not</UserDoesNotExistInfo>
                                 )}
@@ -215,7 +224,9 @@ const PatientDetails = (props: Props) => {
                                             <DataSetTitle>Nazwa: {dataSet.dataSet.title}</DataSetTitle>
                                             <DataSetDescription>Opis: {dataSet.dataSet.descr}</DataSetDescription>
                                             <DataSetUnit>Jednostka: {dataSet.dataSet.unit}</DataSetUnit>
-                                            <DataSetUnit onClick={() => onDataSetDelete(dataSet.dataSet.id)}>Usuń zbiór danych</DataSetUnit>
+                                            <DeleteDataSet onClick={() => onDataSetDelete(dataSet.dataSet.id)}>
+                                                Usuń zbiór danych
+                                            </DeleteDataSet>
                                         </DataSetInfo>
                                         <DataSetInner>
                                             <DataSetTableWrapper>

@@ -7,7 +7,7 @@ import { ApplicationState } from "../../store";
 import { filter } from "../../store/filters/actions";
 import { FiltersState } from "../../store/filters/types";
 import { FilterFormStyled, ResetButton, FormWrapper } from "./FilterForm.styled";
-import { SubmitButton } from "../SharedStyledComponents/Form.styled";
+import { SubmitButton, FormGroup } from "../SharedStyledComponents/Form.styled";
 import "react-input-range/lib/css/index.css";
 
 const options = [
@@ -48,58 +48,68 @@ const FilterForm = (props: Props) => {
             }}
             render={({ setFieldValue, values, touched, setFieldTouched, errors }) => (
                 <FormWrapper>
-                    <ResetButton
-                        onClick={() => {
-                            setFieldValue("priceRange", {
-                                min: 0,
-                                max: 200
-                            });
-                            setFieldValue("city", "All");
-                            setFieldValue("services", []);
-                            const values = {
-                                city: "All",
-                                services: [],
-                                priceRange: {
+                    <FormGroup>
+                        <ResetButton
+                            onClick={() => {
+                                setFieldValue("priceRange", {
                                     min: 0,
                                     max: 200
-                                }
-                            };
-                            props.filter(values);
-                        }}
-                    >
-                        reset
-                    </ResetButton>
-                    <FilterFormStyled>
-                        <Field name="city" component="select">
-                            {cities.map((c, index) => {
-                                return (
-                                    <option key={index} value={c.value}>
-                                        {c.label}
-                                    </option>
-                                );
-                            })}
-                            <option value="All">Wszystkie</option>
-                        </Field>
-                        <InputRange
-                            maxValue={300}
-                            minValue={0}
-                            name="priceRange"
-                            value={values.priceRange}
-                            onChange={(value: any) => setFieldValue("priceRange", value)}
-                        />
-                        <Select
-                            value={values.services}
-                            onChange={(value: any) => setFieldValue("services", value)}
-                            onBlur={() => setFieldTouched("services", true)}
-                            error={errors.services}
-                            touched={touched.services}
-                            isMulti
-                            options={options}
-                            classNamePrefix="react-select"
-                            placeholder="Usługi"
-                        />
+                                });
+                                setFieldValue("city", "All");
+                                setFieldValue("services", []);
+                                const values = {
+                                    city: "All",
+                                    services: [],
+                                    priceRange: {
+                                        min: 0,
+                                        max: 200
+                                    }
+                                };
+                                props.filter(values);
+                            }}
+                        >
+                            Resetuj filtry
+                        </ResetButton>
+                    </FormGroup>
 
-                        <SubmitButton type="submit">Filtruj</SubmitButton>
+                    <FilterFormStyled>
+                        <FormGroup>
+                            <Field name="city" component="select">
+                                {cities.map((c, index) => {
+                                    return (
+                                        <option key={index} value={c.value}>
+                                            {c.label}
+                                        </option>
+                                    );
+                                })}
+                                <option value="All">Wszystkie</option>
+                            </Field>
+                        </FormGroup>
+                        <FormGroup>
+                            <InputRange
+                                maxValue={300}
+                                minValue={0}
+                                name="priceRange"
+                                value={values.priceRange}
+                                onChange={(value: any) => setFieldValue("priceRange", value)}
+                            />
+                        </FormGroup>
+                        <FormGroup>
+                            <Select
+                                value={values.services}
+                                onChange={(value: any) => setFieldValue("services", value)}
+                                onBlur={() => setFieldTouched("services", true)}
+                                error={errors.services}
+                                touched={touched.services}
+                                isMulti
+                                options={options}
+                                classNamePrefix="react-select"
+                                placeholder="Usługi"
+                            />
+                        </FormGroup>
+                        <FormGroup>
+                            <SubmitButton type="submit">Filtruj</SubmitButton>
+                        </FormGroup>
                     </FilterFormStyled>
                 </FormWrapper>
             )}

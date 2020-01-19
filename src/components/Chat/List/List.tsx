@@ -12,6 +12,7 @@ type Props = {
           }[]
         | undefined;
     onElementClick: (id: string) => any;
+    active: number;
 };
 
 const List = (props: Props) => {
@@ -23,7 +24,7 @@ const List = (props: Props) => {
                     <ListInfo>Nie masz jeszcze zadnych konwersacji</ListInfo>
                 ) : (
                     elements.map((e, index) => (
-                        <ListElement isActive={false} key={index} onClick={() => onElementClick(e.id)}>
+                        <ListElement isActive={String(index) !== String(props.active)} key={index} onClick={() => onElementClick(e.id)}>
                             {e.value}
                         </ListElement>
                     ))

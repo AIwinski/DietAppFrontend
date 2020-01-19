@@ -110,7 +110,7 @@ const ProfileList = (props: Props) => {
                     <ButtonWrapper>
                         {!isFetching &&
                             (allFetched ? (
-                                <AllFetchedBadge>Sciagnieto wszystkie posty</AllFetchedBadge>
+                                <AllFetchedBadge>Pobrano wszystkie profile</AllFetchedBadge>
                             ) : (
                                 <LoadMoreButton onClick={tryFetchMore}>Załaduj więcej</LoadMoreButton>
                             ))}

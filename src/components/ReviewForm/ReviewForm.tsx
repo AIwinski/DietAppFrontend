@@ -85,15 +85,16 @@ const ReviewForm = (props: Props) => {
                                 .then(res => {
                                     console.log(res);
                                     setReviews([...reviews, res.data.rating]);
+                                    const revs = [...reviews, res.data.rating];
 
-                                    let numberOfRatings = reviews.length;
+                                    let numberOfRatings = revs.length;
                                     let sumOfReviews = 0;
-                                    reviews.forEach((element: any) => {
+                                    revs.forEach((element: any) => {
                                         sumOfReviews += element.ratingValue;
                                     });
                                     let avgRating = sumOfReviews / numberOfRatings || 0;
 
-                                    props.setRatingData(numberOfRatings, avgRating);
+                                    props.setRatingData(avgRating, numberOfRatings);
                                     setInProgress(false);
                                 })
                                 .catch(err => {

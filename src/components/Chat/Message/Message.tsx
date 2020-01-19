@@ -20,9 +20,14 @@ const Message = (props: Props) => {
 
     const downloadFile = (id: string) => {
         ChatApi.getFile(id)
-            .then(res => {
-                saveAs(res.data, initialFileName);
+            .then((res: any) => {
                 console.log(res);
+                if (res.statusText === "OK") {
+                    const blob = new Blob([res.data], {
+                        type: res.data.type
+                    });
+                    saveAs(blob, initialFileName);
+                }
             })
             .catch(err => {
                 console.log(err);

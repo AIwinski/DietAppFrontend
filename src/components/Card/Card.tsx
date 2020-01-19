@@ -3,6 +3,7 @@ import Rating from "../Rating/Rating";
 import { Link } from "react-router-dom";
 import { CardStyled, CardImageWrapper, CardContent, CardContentLeft, CardContentRight, CardDescription, CardCity, PremiumTag, CardName } from "./Card.styled";
 import Avatar from "../Avatar/Avatar";
+import { LinkStyled } from "../Navbar/Navbar.styled";
 
 type Props = {
     name: string;
@@ -28,7 +29,7 @@ const Card = (props: Props) => {
             <CardContent>
                 <CardContentLeft>
                     <CardName>
-                        <Link to={profileURL}>{name}</Link>
+                        <LinkStyled to={profileURL}>{name}</LinkStyled>
                     </CardName>
                     {isPremium && <PremiumTag>&#10004;</PremiumTag>}
                     <CardCity>{city}</CardCity>
@@ -36,7 +37,7 @@ const Card = (props: Props) => {
                 </CardContentLeft>
                 <CardContentRight>
                     <Rating rating={totalRating} numberOfRatings={numberOfRatings} />
-                    <Link to={profileURL}>Zobacz wiecej</Link>
+                    <LinkStyled to={profileURL}>Zobacz wiecej</LinkStyled>
                 </CardContentRight>
             </CardContent>
         </CardStyled>

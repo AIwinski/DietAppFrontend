@@ -1,7 +1,7 @@
 import styled from 'styled-components';
-import { Link } from "react-router-dom";
+import { LinkStyled } from '../Navbar/Navbar.styled';
 
-export const AddPatientButtonStyled = styled(Link)`
+export const AddPatientButtonStyled = styled(LinkStyled)`
 
 `
 
@@ -9,6 +9,6 @@ export const Wrapper = styled.div`
 
 `
 
-export const OpenPatientButton = styled(Link)`
+export const OpenPatientButton = styled(LinkStyled)`
 
 `

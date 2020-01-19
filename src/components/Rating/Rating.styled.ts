@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { COLORS } from "../../styles/variables";
+import { COLORS, BREAKPOINTS } from "../../styles/variables";
 
 export const RatingStyled = styled.div`
     display: inline-flex;
@@ -10,8 +10,9 @@ export const RatingStyled = styled.div`
 `;
 
 export const RatingValue = styled.span`
-    font-size: 1.5rem;
-    margin-right: 0.5rem;
+    font-size: 1.2rem;
+    margin-right: 0.2rem;
+    width: 5rem;
 `;
 
 export type StarProps = {
@@ -20,11 +21,14 @@ export type StarProps = {
 
 export const Star = styled.span<StarProps>`
     font-size: 2.4rem;
+    @media (max-width: ${BREAKPOINTS.md}) {
+        font-size: 1.6rem;
+    }
     color: ${props => (props.active ? COLORS.golden : COLORS.gray)};
     vertical-align: top;
 `;
 
 export const RatingNumber = styled.span`
-    font-size: 1.5rem;
-    margin-left: 0.5rem;
+    font-size: 1.2rem;
+    margin-left: 0.2rem;
 `;

@@ -113,7 +113,9 @@ const Chat = {
     },
     getConversations: () => requests.get("/chat/conversations"),
     getMessages: (data: GetMessagesProps) => requests.get("/chat/conversations/" + encodeURIComponent(data.conversationId) + "?qty=" + encodeURIComponent(data.qty) + "&offset=" + encodeURIComponent(data.offset)),
-    getFile: (id: string) => requests.get("/upload/file/" + id),
+    getFile: (id: string) => requests.get("/upload/file/" + id, {
+        responseType: 'blob'
+    }),
 }
 
 export interface SendMessageProps {

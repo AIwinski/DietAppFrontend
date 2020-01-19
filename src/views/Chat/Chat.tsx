@@ -221,7 +221,7 @@ const Chat = (props: Props) => {
     };
 
     const scrollToBottomOfChatWindow = () => {
-        if (chatWindowRef) {
+        if (chatWindowRef && chatWindowRef.current) {
             // @ts-ignore
             chatWindowRef.current.scrollTop = chatWindowRef.current.scrollHeight;
         }
@@ -232,6 +232,11 @@ const Chat = (props: Props) => {
             <List
                 elements={!isLoadingConversations && conversations ? parseConversationResponse(conversations) : undefined}
                 onElementClick={onConversationClick}
+                active={
+                    !isLoadingConversations && conversations
+                        ? conversations.findIndex(c => String(c.id) === String(activeConversationId))
+                        : -1
+                }
             />
             <ConversationWrapper>
                 <ChatWindow ref={chatWindowRef}>

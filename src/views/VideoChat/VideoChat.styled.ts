@@ -14,20 +14,18 @@ export const ChatSection = styled.div`
     position: relative;
     height: 100%;
     box-sizing: border-box;
-    border: 1px solid red;
+    border-left: 1px solid #ccc;
 `
 
 export const VideoSection = styled.div`
     position: relative;
     height: 100%;
     box-sizing: border-box;
-    border: 2px solid #d0d;
     overflow: hidden;
     position: relative;
 `
 
 export const MainVideo = styled.video`
-    border: 2px solid green;
     position: absolute;
     top: 50%; 
     left: 50%;
@@ -41,7 +39,7 @@ export const MainVideo = styled.video`
 `
 
 export const SmallVideo = styled.video`
-    border: 2px solid green;
+    border: 1px solid #ccc;
     position: absolute;
     bottom: 0.5rem;
     right: 0.5rem;
