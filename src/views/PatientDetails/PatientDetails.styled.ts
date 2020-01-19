@@ -120,7 +120,8 @@ export const DataSetDescription = styled.div`
 `
 
 export const DataSetTitle = styled.div`
-
+    font-weight: bold;
+    font-size: 2rem;
 `
 
 export const DataSetUnit = styled.div`
