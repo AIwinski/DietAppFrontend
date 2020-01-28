@@ -14,9 +14,9 @@ import { Route, Redirect } from "react-router";
 import { ConnectedRouter } from "connected-react-router";
 import ProtectedRoute from "../ProtectedRoute";
 
-import Home from "../../views/Home/Home";
+// import Home from "../../views/Home/Home";
 
-// const Home = lazy(() => import("../../views/Home/Home"));
+const Home = lazy(() => import("../../views/Home/Home"));
 const Login = lazy(() => import("../../views/Login/Login"));
 const Register = lazy(() => import("../../views/Register/Register"));
 const Chat = lazy(() => import("../../views/Chat/Chat"));

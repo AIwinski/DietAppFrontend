@@ -41,19 +41,19 @@ const GeneralSettings = (props: Props) => {
             }}
         >
             <GeneralSettingsForm>
-                <FormInfo>General settings</FormInfo>
+                <FormInfo>Ogólne ustawienia profilu</FormInfo>
                 <FormGroup>
-                    <LabelStyled htmlFor="city">City</LabelStyled>
-                    <FieldStyled id="city" name="city" placeholder="City" />
+                    <LabelStyled htmlFor="city">Miasto</LabelStyled>
+                    <FieldStyled id="city" name="city" placeholder="Miasto" />
                     <ErrorMessageStyled name="city" component="div" />
                 </FormGroup>
                 <FormGroup>
-                    <LabelStyled htmlFor="descr">Description</LabelStyled>
-                    <TextAreaStyled name="descr" placeholder="descr" id="descr" component="textarea" />
+                    <LabelStyled htmlFor="descr">Opis</LabelStyled>
+                    <TextAreaStyled name="descr" placeholder="Opis" id="descr" component="textarea" />
                     <ErrorMessageStyled name="descr" component="div" />
                 </FormGroup>
                 <FormGroup>
-                    <SubmitButton type="submit">Update general data</SubmitButton>
+                    <SubmitButton type="submit">Aktualizuj</SubmitButton>
                 </FormGroup>
             </GeneralSettingsForm>
         </Formik>

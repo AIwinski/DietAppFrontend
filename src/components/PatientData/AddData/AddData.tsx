@@ -28,7 +28,7 @@ const AddData = (props: Props) => {
             onSubmit={(values, { setFieldError, setValues, resetForm }) => {
                 console.log(values);
                 let dateValue = moment(values.dateValue, "DD-MM-YYYY HH:mm", true);
-                if (!dateValue.isValid()) {
+                if (!dateValue.isValid() || dateValue.toDate().getTime() === NaN) {
                     setFieldError("dateValue", "Niepoprawny format daty");
                     return;
                 }

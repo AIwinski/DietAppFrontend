@@ -34,9 +34,18 @@ type Props = {
 const PersonalSettings = (props: Props) => {
     return (
         <PersonalSettingsStyled>
-            <AddImageForm type="avatar" profileId={props.profileId} onImageAdd={props.onAvatarAdd}></AddImageForm>
-            <Avatar url={props.currentAvatar ? props.currentAvatar : undefined}></Avatar>
-            <ResetAvatarButton onClick={props.onAvatarReset}>reset avatar</ResetAvatarButton>
+            <FormGroup>
+                <AddImageForm type="avatar" profileId={props.profileId} onImageAdd={props.onAvatarAdd}></AddImageForm>
+            </FormGroup>
+            <FormGroup>
+                Avatar
+                <CurrentAvatar>
+                    <Avatar isFull={true} url={props.currentAvatar ? props.currentAvatar : undefined}></Avatar>
+                </CurrentAvatar>
+            </FormGroup>
+            <FormGroup>
+                <SubmitButton onClick={props.onAvatarReset}>Resetuj avatar</SubmitButton>
+            </FormGroup>
 
             <Formik
                 initialValues={{ displayName: props.currentDisplayName }}
@@ -52,14 +61,14 @@ const PersonalSettings = (props: Props) => {
                 }}
             >
                 <PersonalSettingsForm>
-                    <FormInfo>Edit personal settings</FormInfo>
+                    <FormInfo>Edytuj dane konta</FormInfo>
                     <FormGroup>
-                        <LabelStyled htmlFor="displayName">Display name</LabelStyled>
-                        <FieldStyled id="displayName" name="displayName" placeholder="Display name" />
+                        <LabelStyled htmlFor="displayName">Nick</LabelStyled>
+                        <FieldStyled id="displayName" name="displayName" placeholder="Nick" />
                         <ErrorMessageStyled name="displayName" component="div" />
                     </FormGroup>
                     <FormGroup>
-                        <SubmitButton type="submit">Update personal settings</SubmitButton>
+                        <SubmitButton type="submit">Aktualizuj</SubmitButton>
                     </FormGroup>
                 </PersonalSettingsForm>
             </Formik>

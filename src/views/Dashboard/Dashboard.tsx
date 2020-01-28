@@ -103,7 +103,7 @@ const Dashboard = (props: Props) => {
                     </Container>
                     <NotesAndPatientsContainer>
                         <Container>
-                            <SectionTitle>Moje notatki</SectionTitle>
+                            <SectionTitle>Notatki</SectionTitle>
                             {!isNotesFetching ? (
                                 <NotesList>
                                     {notes.map((note, index) => {

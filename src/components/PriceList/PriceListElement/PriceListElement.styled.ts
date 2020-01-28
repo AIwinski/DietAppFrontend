@@ -21,7 +21,7 @@ export const Price = styled.div`
 `
 
 export const DeleteButton = styled.button`
-    border: 1px solid red;
+    border: 1px solid #ddd;
     padding: 1rem;
 
     &:hover {

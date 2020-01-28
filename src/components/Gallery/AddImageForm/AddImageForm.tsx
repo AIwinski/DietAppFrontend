@@ -4,6 +4,7 @@ import { Formik, Form as FormikForm } from "formik";
 import { Profile as ProfileApi, AddImageProps } from "../../../api";
 import { file } from "@babel/types";
 import Thumbnail from "../Thumbnail/Thumbnail";
+import { SubmitButton } from "../../SharedStyledComponents/Form.styled";
 
 type Props = {
     profileId: string;
@@ -61,7 +62,7 @@ const AddImageForm = (props: Props) => {
                         }}
                     ></AddImageInput>
                     <Thumbnail file={values.file}></Thumbnail>
-                    <AddImageSubmitButton type="submit">&#8250;</AddImageSubmitButton>
+                    <SubmitButton type="submit">Wyślij &#8250;</SubmitButton>
                 </FormikForm>
             )}
         ></Formik>

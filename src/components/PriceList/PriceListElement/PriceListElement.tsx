@@ -23,7 +23,7 @@ const PriceListElement = (props: Props) => {
                             }
                         }}
                     >
-                        Delete
+                        Usuń
                     </DeleteButton>
                 </React.Fragment>
             )}

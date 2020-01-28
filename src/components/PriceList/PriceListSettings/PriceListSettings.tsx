@@ -81,19 +81,19 @@ const PriceListSettings = (props: Props) => {
                 }}
             >
                 <PriceListForm>
-                    <FormInfo>Edit price list</FormInfo>
+                    <FormInfo>Ustawienia cennika</FormInfo>
                     <FormGroup>
-                        <LabelStyled htmlFor="elementName">Element name</LabelStyled>
-                        <FieldStyled id="elementName" name="elementName" placeholder="Element name" />
+                        <LabelStyled htmlFor="elementName">Nazwa usługi</LabelStyled>
+                        <FieldStyled id="elementName" name="elementName" placeholder="Nazwa usługi" />
                         <ErrorMessageStyled name="elementName" component="div" />
                     </FormGroup>
                     <FormGroup>
-                        <LabelStyled htmlFor="price">Price</LabelStyled>
-                        <FieldStyled name="price" placeholder="price" id="price" />
+                        <LabelStyled htmlFor="price">Cena</LabelStyled>
+                        <FieldStyled name="price" placeholder="Cena" id="price" />
                         <ErrorMessageStyled name="price" component="div" />
                     </FormGroup>
                     <FormGroup>
-                        <SubmitButton type="submit">Add new price list element</SubmitButton>
+                        <SubmitButton type="submit">Dodaj nowy element cennika</SubmitButton>
                     </FormGroup>
                 </PriceListForm>
             </Formik>

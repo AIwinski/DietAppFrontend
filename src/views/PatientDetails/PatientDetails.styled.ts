@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+import { BREAKPOINTS } from '../../styles/variables';
 
 export const PatientDetailsStyled = styled.div`
 
@@ -74,6 +75,11 @@ export const DataSetInner = styled.div`
     grid-template-columns: 1fr 2fr;
     grid-gap: 0.5rem;
     margin-bottom: 0.5rem;
+
+    @media (max-width: ${BREAKPOINTS.md}) {
+        grid-template-columns: 1fr;
+        padding: 0;
+    }
     
 `
 
@@ -136,6 +142,11 @@ export const DataSetInfo = styled.div`
     border: 1px solid #ccc;
     margin-bottom: 1rem;
     border-radius: 6px;
+
+    @media (max-width: ${BREAKPOINTS.md}) {
+        grid-template-columns: 1fr;
+        padding: 0;
+    }
 `
 
 export const DataSetDescription = styled.div`

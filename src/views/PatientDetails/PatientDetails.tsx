@@ -40,9 +40,11 @@ import moment from "moment";
 import { DeleteButton } from "../../components/Notes/Note/Note.styled";
 import { ResponsiveContainer, LineChart, Line, XAxis, YAxis } from "recharts";
 import { SectionTitle } from "../Home/Home.styled";
-import { Container } from "../Dashboard/Dashboard.styled";
+import { Container, NotesAndPatientsContainer, NotesList } from "../Dashboard/Dashboard.styled";
 import { SubmitButton } from "../../components/SharedStyledComponents/Form.styled";
 import { LinkStyled } from "../../components/Navbar/Navbar.styled";
+import Note from "../../components/Notes/Note/Note";
+import NoteForm from "../../components/Notes/NoteForm/NoteForm";
 
 interface MatchParams {
     id: string;
@@ -59,6 +61,9 @@ const PatientDetails = (props: Props) => {
 
     const [addDataSetShown, setDataSetShown] = useState(false);
 
+    const [notes, setNotes] = useState([] as any[]);
+    const [isNotesFetching, setNotesFetching] = useState(true);
+
     useEffect(() => {
         Patient.getPatient(props.match.params.id)
             .then(res => {
@@ -72,6 +77,18 @@ const PatientDetails = (props: Props) => {
                 setPatientFetching(false);
             });
 
+        Patient.getNotes(props.match.params.id)
+            .then(res => {
+                console.log(res);
+                setNotes(res.data.notes);
+            })
+            .catch(err => {
+                console.log(err);
+            })
+            .finally(() => {
+                setNotesFetching(false);
+            });
+
         Patient.getDataSets(props.match.params.id)
             .then(res => {
                 console.log(res);
@@ -82,7 +99,7 @@ const PatientDetails = (props: Props) => {
                         dataValues: ds.dataValues.map((dv: any) => {
                             return {
                                 ...dv,
-                                dateValue: moment
+                                dateValueString: moment
                                     .utc(dv.dateValue)
                                     .local()
                                     .format("DD-MM-YYYY HH:mm")
@@ -92,19 +109,18 @@ const PatientDetails = (props: Props) => {
                 });
                 dataSets.forEach((ds: any) => {
                     ds.dataValues.sort((a: any, b: any) => {
-                        if (
+                        console.log(
                             moment(a.dateValue)
                                 .toDate()
-                                .getTime() <
-                            moment(b.dateValue)
-                                .toDate()
                                 .getTime()
-                        ) {
+                        );
+                        if (a.dateValue < b.dateValue) {
                             return -1;
                         } else {
                             return 1;
                         }
                     });
+                    console.log(ds);
                 });
                 setDataSets(dataSets);
             })
@@ -136,24 +152,18 @@ const PatientDetails = (props: Props) => {
         const dsCopy: any[] = JSON.parse(JSON.stringify(dataSets));
         data = {
             ...data,
-            dateValue: moment
+            dateValueString: moment
                 .utc(data.dateValue)
                 .local()
                 .format("DD-MM-YYYY HH:mm")
         };
         dsCopy.find(ds => ds.dataSet.id === dataSetId).dataValues.push(data);
+        console.log(dsCopy);
 
         dsCopy
             .find(ds => ds.dataSet.id === dataSetId)
             .dataValues.sort((a: any, b: any) => {
-                if (
-                    moment(a.dateValue)
-                        .toDate()
-                        .getTime() <
-                    moment(b.dateValue)
-                        .toDate()
-                        .getTime()
-                ) {
+                if (a.dateValue < b.dateValue) {
                     return -1;
                 } else {
                     return 1;
@@ -167,9 +177,9 @@ const PatientDetails = (props: Props) => {
             .then(res => {
                 const dsCopy: any[] = JSON.parse(JSON.stringify(dataSets));
                 dsCopy
-                    .find(ds => ds.id === dataSetId)
+                    .find(ds => ds.dataSet.id === dataSetId)
                     .dataValues.splice(
-                        dsCopy.find(ds => ds.id === dataSetId).dataValues.findIndex((i: any) => i.id === id),
+                        dsCopy.find(ds => ds.dataSet.id === dataSetId).dataValues.findIndex((i: any) => i.id === id),
                         1
                     );
                 setDataSets(dsCopy);
@@ -177,6 +187,14 @@ const PatientDetails = (props: Props) => {
             .catch(err => {
                 console.log(err);
             });
+    };
+
+    const onNoteAdd = (note: any) => {
+        setNotes([...notes, note]);
+    };
+
+    const onNoteDelete = (id: string) => {
+        setNotes(notes.filter(e => e.id !== id));
     };
 
     return (
@@ -198,20 +216,47 @@ const PatientDetails = (props: Props) => {
                                         </ContactButton>
                                     </UserExistInfo>
                                 ) : (
-                                    <UserDoesNotExistInfo>Ten pacjent nie jest powiązany z kontem w tej aplikacji</UserDoesNotExistInfo>
+                                    <UserDoesNotExistInfo>
+                                        Ten pacjent nie jest powiązany z kontem w tej aplikacji
+                                    </UserDoesNotExistInfo>
                                 )}
                             </InfoBadge>
-                            <PatientInfo>
-                                <ImageWrapper>
-                                    <Avatar isFull={true}></Avatar>
-                                </ImageWrapper>
-                                <PatientInfoInner>
-                                    <Name>Imię i nazwisko: {patient.firstName + " " + patient.lastName}</Name>
-                                    <Age>Wiek: {patient.age}</Age>
-                                    <Gender>Płeć: {patient.gender}</Gender>
-                                    <TherapyGoal>Cel terapii: {patient.therapyGoal}</TherapyGoal>
-                                </PatientInfoInner>
-                            </PatientInfo>
+                            <NotesAndPatientsContainer>
+                                <Container>
+                                    <PatientInfo>
+                                        <ImageWrapper>
+                                            <Avatar isFull={true}></Avatar>
+                                        </ImageWrapper>
+                                        <PatientInfoInner>
+                                            <Name>Imię i nazwisko: {patient.firstName + " " + patient.lastName}</Name>
+                                            <Age>Wiek: {patient.age}</Age>
+                                            <Gender>Płeć: {patient.gender}</Gender>
+                                            <TherapyGoal>Cel terapii: {patient.therapyGoal}</TherapyGoal>
+                                        </PatientInfoInner>
+                                    </PatientInfo>
+                                </Container>
+                                <Container>
+                                    <SectionTitle>Moje notatki</SectionTitle>
+                                    {!isNotesFetching ? (
+                                        <NotesList>
+                                            {notes.map((note, index) => {
+                                                return (
+                                                    <Note
+                                                        createdAt={note.createdAt}
+                                                        content={note.content}
+                                                        key={index}
+                                                        id={note.id}
+                                                        onNoteDelete={onNoteDelete}
+                                                    ></Note>
+                                                );
+                                            })}
+                                        </NotesList>
+                                    ) : (
+                                        <Loader></Loader>
+                                    )}
+                                    <NoteForm onNoteAdd={onNoteAdd} patientId={props.match.params.id}></NoteForm>
+                                </Container>
+                            </NotesAndPatientsContainer>
                         </React.Fragment>
                     ) : (
                         <Loader></Loader>
@@ -244,7 +289,7 @@ const PatientDetails = (props: Props) => {
                                                         {dataSet.dataValues.map((dv: any, index: any) => {
                                                             return (
                                                                 <StyledTr key={index}>
-                                                                    <StyledTd>{dv.dateValue}</StyledTd>
+                                                                    <StyledTd>{dv.dateValueString}</StyledTd>
                                                                     <StyledTd>{dv.dataValue}</StyledTd>
                                                                     <StyledTd>
                                                                         <DeleteButton
@@ -270,11 +315,11 @@ const PatientDetails = (props: Props) => {
                                             <DataSetChartWrapper>
                                                 <ResponsiveContainer width="100%" height={350}>
                                                     <LineChart
-                                                        data={dataSet.dataValues.reverse()}
+                                                        data={dataSet.dataValues}
                                                         margin={{ top: 5, right: 0, left: 0, bottom: 5 }}
                                                     >
                                                         <Line type="monotone" dataKey="dataValue" />
-                                                        <XAxis dataKey="dateValue" />
+                                                        <XAxis dataKey="dateValueString" />
                                                         <YAxis />
                                                     </LineChart>
                                                 </ResponsiveContainer>

@@ -23,17 +23,19 @@ type Props = ReturnType<typeof mapStateToProps> & typeof mapDispatchToProps & {}
 const ProfileSettings = (props: Props) => {
     const id = props.currentUser.profileId;
     const [profile, setProfile] = useState();
-    const [currentView, setCurrentView] = useState("GENERAL");
+    const [currentView, setCurrentView] = useState("PERSONAL");
 
     useEffect(() => {
-        ProfileApi.getProfile(id)
-            .then(res => {
-                console.log(res.data.profile);
-                setProfile(res.data.profile);
-            })
-            .catch(err => {
-                console.log(err);
-            });
+        if (props.currentUser.accountType === "doctor") {
+            ProfileApi.getProfile(id)
+                .then(res => {
+                    console.log(res.data.profile);
+                    setProfile(res.data.profile);
+                })
+                .catch(err => {
+                    console.log(err);
+                });
+        }
     }, []);
 
     const onPriceListUpdate = (data: any) => {
@@ -82,85 +84,107 @@ const ProfileSettings = (props: Props) => {
     };
 
     const onProfileUpdate = (data: any) => {
-        console.log(data)
-        setProfile({...profile, ...data.profile})
+        console.log(data);
+        setProfile({ ...profile, ...data.profile });
     };
 
     return (
         <ProfileSettingsStyled>
             <ContainerFluid>
                 <ProfileSettingsStyledInner>
-                    {profile ? (
+                    {(props.currentUser.accountType === "doctor" && profile) || props.currentUser.accountType === "patient" ? (
                         <React.Fragment>
                             <SettingList>
-                                <SettingListTitle>Profile settings</SettingListTitle>
-                                <SettingListElement
-                                    onClick={() => setCurrentView("GENERAL")}
-                                    isActive={currentView === "GENERAL"}
-                                >
-                                    General settings
-                                </SettingListElement>
+                                <SettingListTitle>Ustawienia</SettingListTitle>
                                 <SettingListElement
                                     onClick={() => setCurrentView("PERSONAL")}
                                     isActive={currentView === "PERSONAL"}
                                 >
-                                    Personal settings
+                                    Ustawienia konta
                                 </SettingListElement>
-                                <SettingListElement
-                                    onClick={() => setCurrentView("PRICE_LIST")}
-                                    isActive={currentView === "PRICE_LIST"}
-                                >
-                                    Price list settings
-                                </SettingListElement>
-                                <SettingListElement
-                                    onClick={() => setCurrentView("GALLERY")}
-                                    isActive={currentView === "GALLERY"}
-                                >
-                                    Gallery settings
-                                </SettingListElement>
+                                {props.currentUser.accountType === "doctor" && (
+                                    <React.Fragment>
+                                        <SettingListElement
+                                            onClick={() => setCurrentView("GENERAL")}
+                                            isActive={currentView === "GENERAL"}
+                                        >
+                                            Ogólne ustawienia profilu
+                                        </SettingListElement>
+
+                                        <SettingListElement
+                                            onClick={() => setCurrentView("PRICE_LIST")}
+                                            isActive={currentView === "PRICE_LIST"}
+                                        >
+                                            Ustawienia cennika
+                                        </SettingListElement>
+                                        <SettingListElement
+                                            onClick={() => setCurrentView("GALLERY")}
+                                            isActive={currentView === "GALLERY"}
+                                        >
+                                            Ustawienia galerii
+                                        </SettingListElement>
+                                    </React.Fragment>
+                                )}
                             </SettingList>
                             <SettingWrapper>
-                                {(function() {
-                                    switch (currentView) {
-                                        case "PRICE_LIST":
-                                            return (
-                                                <PriceListSettings
-                                                    profileId={id}
-                                                    priceList={profile.priceListElements}
-                                                    onPriceListUpdate={onPriceListUpdate}
-                                                ></PriceListSettings>
-                                            );
-                                        case "GALLERY":
-                                            return (
-                                                <GallerySettings
-                                                    images={profile.images}
-                                                    profileId={profile.id}
-                                                    onImageAdd={onImageAdd}
-                                                    onImageDelete={onImageDelete}
-                                                ></GallerySettings>
-                                            );
-                                        case "PERSONAL":
-                                            return (
-                                                <PersonalSettings
-                                                    profile={profile}
-                                                    profileId={profile.id}
-                                                    onAvatarAdd={onAvatarAdd}
-                                                    onAvatarReset={onAvatarReset}
-                                                    onProfileUpdate={onUserDataUpdate}
-                                                    currentAvatar={props.currentUser.avatar}
-                                                    currentDisplayName={props.currentUser.displayName}
-                                                ></PersonalSettings>
-                                            );
-                                        case "GENERAL":
-                                            return (
-                                                <GeneralSettings
-                                                    onProfileUpdate={onProfileUpdate}
-                                                    profile={profile}
-                                                    profileId={profile.id}
-                                                ></GeneralSettings>
-                                            );
-                                    }
-                                })()}
+                                {props.currentUser.accountType === "doctor"
+                                    ? (function() {
+                                          switch (currentView) {
+                                              case "PRICE_LIST":
+                                                  return (
+                                                      <PriceListSettings
+                                                          profileId={id}
+                                                          priceList={profile.priceListElements}
+                                                          onPriceListUpdate={onPriceListUpdate}
+                                                      ></PriceListSettings>
+                                                  );
+                                              case "GALLERY":
+                                                  return (
+                                                      <GallerySettings
+                                                          images={profile.images}
+                                                          profileId={profile.id}
+                                                          onImageAdd={onImageAdd}
+                                                          onImageDelete={onImageDelete}
+                                                      ></GallerySettings>
+                                                  );
+                                              case "PERSONAL":
+                                                  return (
+                                                      <PersonalSettings
+                                                          profile={profile}
+                                                          profileId={profile.id}
+                                                          onAvatarAdd={onAvatarAdd}
+                                                          onAvatarReset={onAvatarReset}
+                                                          onProfileUpdate={onUserDataUpdate}
+                                                          currentAvatar={props.currentUser.avatar}
+                                                          currentDisplayName={props.currentUser.displayName}
+                                                      ></PersonalSettings>
+                                                  );
+                                              case "GENERAL":
+                                                  return (
+                                                      <GeneralSettings
+                                                          onProfileUpdate={onProfileUpdate}
+                                                          profile={profile}
+                                                          profileId={profile.id}
+                                                      ></GeneralSettings>
+                                                  );
+                                          }
+                                      })()
+                                    : (function() {
+                                          switch (currentView) {
+                                              case "PERSONAL":
+                                                  return (
+                                                      <PersonalSettings
+                                                          profile={profile}
+                                                          profileId={""}
+                                                          onAvatarAdd={onAvatarAdd}
+                                                          onAvatarReset={onAvatarReset}
+                                                          onProfileUpdate={onUserDataUpdate}
+                                                          currentAvatar={props.currentUser.avatar}
+                                                          currentDisplayName={props.currentUser.displayName}
+                                                      ></PersonalSettings>
+                                                  );
+                                          }
+                                      })()}
                             </SettingWrapper>
                         </React.Fragment>
                     ) : (

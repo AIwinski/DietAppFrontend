@@ -5,9 +5,9 @@ export const PersonalSettingsStyled = styled.div`
 
 `
 
-export const CurrentAvatar = styled.img`
-    width: 100px;
-    height: 100px;
+export const CurrentAvatar = styled.div`
+    width: 200px;
+    height: 200px;
 `
 
 export const PersonalSettingsForm = styled(Form)`
