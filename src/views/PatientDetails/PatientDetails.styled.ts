@@ -67,7 +67,8 @@ export const TherapyGoal = styled.div`
 export const DataSetWrapper = styled.div`
     border: 1px solid #ccc;
     border-radius: 6px;
-    padding: 0.5rem;
+    padding: 1rem;
+    margin-bottom: 0.5rem;
 `
 
 export const DataSetInner = styled.div`
@@ -137,7 +138,7 @@ export const StyledTd = styled.td`
 export const DataSetInfo = styled.div`
     display: grid;
     grid-template-columns: 1fr 1fr;
-    padding: 0.5rem;
+    padding: 2rem;
     grid-gap: 0.5rem;
     border: 1px solid #ccc;
     margin-bottom: 1rem;

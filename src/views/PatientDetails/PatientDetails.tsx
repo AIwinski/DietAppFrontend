@@ -280,8 +280,8 @@ const PatientDetails = (props: Props) => {
                                                 <Table>
                                                     <thead>
                                                         <StyledTr>
-                                                            <StyledTh>Wartość</StyledTh>
                                                             <StyledTh>Data</StyledTh>
+                                                            <StyledTh>Wartość</StyledTh>
                                                             <StyledTh>Usuń wartość</StyledTh>
                                                         </StyledTr>
                                                     </thead>
@@ -290,7 +290,7 @@ const PatientDetails = (props: Props) => {
                                                             return (
                                                                 <StyledTr key={index}>
                                                                     <StyledTd>{dv.dateValueString}</StyledTd>
-                                                                    <StyledTd>{dv.dataValue}</StyledTd>
+                                                                    <StyledTd>{dv.dataValue} {dataSet.dataSet.unit}</StyledTd>
                                                                     <StyledTd>
                                                                         <DeleteButton
                                                                             onClick={() =>

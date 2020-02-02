@@ -1,13 +1,18 @@
 import React, { useRef, useEffect, useState } from "react";
-import { VideoChatStyled, VideoSection, ChatSection, MainVideo, SmallVideo } from "./VideoChat.styled";
+import { VideoChatStyled, VideoSection, ChatSection, MainVideo, SmallVideo, VideoInfo, Cont } from "./VideoChat.styled";
 import { ApplicationState } from "../../store";
 import { RouteComponentProps } from "react-router-dom";
-import { socket } from "../../api";
+import { socket, Profile } from "../../api";
+import { push } from "connected-react-router";
+import { connect } from "react-redux";
+import Loader from "../../components/Loader/Loader";
+import { FormGroup, LabelStyled } from "../../components/SharedStyledComponents/Form.styled";
+
 interface MatchParams {
     id: string;
 }
 
-type Props = RouteComponentProps<MatchParams> & ReturnType<typeof mapStateToProps> & {};
+type Props = RouteComponentProps<MatchParams> & ReturnType<typeof mapStateToProps> & typeof mapDispatchToProps & {};
 
 let localStream: any;
 let peerConnection: any;
@@ -24,9 +29,10 @@ const VideoChat = (props: Props) => {
     const [localAudioActive, setLocalAudioActive] = useState(true);
     const [localVideoActive, setLocalVideoActive] = useState(true);
 
-    const [remoteAudioActive, setRemoteAudioActive] = useState(true);
-    const [remoteVideoActive, setRemoteVideoActive] = useState(true);
+    const [remoteAudioActive, setRemoteAudioActive] = useState(false);
+    const [remoteVideoActive, setRemoteVideoActive] = useState(false);
     const [isRemoteInRoom, setRemoteInRoom] = useState(false);
+    const [user, setUser] = useState();
 
     const localVideoRef = useRef(null);
     const remoteVideoRef = useRef(null);
@@ -34,18 +40,44 @@ const VideoChat = (props: Props) => {
     // @ts-ignore
 
     useEffect(() => {
-        socket.emit("WEBRTC_JOIN", { id: props.match.params.id });
+        Profile.getUser(props.match.params.id)
+            .then(res => {
+                if (res.status === 200) {
+                    console.log(res.data);
+                    setUser(res.data);
+                } else {
+                    setTimeout(() => {
+                        props.push("/");
+                    }, 500);
+                }
+            })
+            .catch(err => {
+                setTimeout(() => {
+                    props.push("/");
+                }, 500);
+            });
+
+        socket.emit("WEBRTC_JOIN", { id: props.match.params.id, audio: localAudioActive, video: localVideoActive });
         socket.on("WEBRTC", (data: any) => {
             gotMessageFromServer(data);
         });
 
         socket.on("WEBRTC_STATUS_CHANGED", (data: any) => {
-            setRemoteAudioActive(data.audio);
-            setRemoteVideoActive(data.video);
+            if (data.id !== props.currentUser.id) {
+                setRemoteAudioActive(data.audio);
+                setRemoteVideoActive(data.video);
+            }
         });
 
         socket.on("WEBRTC_JOINED", (data: any) => {
             setRemoteInRoom(true);
+            if (!peerConnection) {
+                start(true);
+            }
+            if (data.id !== props.currentUser.id) {
+                setRemoteAudioActive(data.audio);
+                setRemoteVideoActive(data.video);
+            }
         });
 
         socket.on("WEBRTC_LEFT", () => {
@@ -189,12 +221,22 @@ const VideoChat = (props: Props) => {
     return (
         <VideoChatStyled>
             <VideoSection>
-                <MainVideo ref={remoteVideoRef} autoPlay playsinline></MainVideo>
+                {peerConnection ? (
+                    <MainVideo ref={remoteVideoRef} autoPlay playsinline></MainVideo>
+                ) : (
+                    user && (
+                        <Cont>
+                            <VideoInfo>Oczekiwanie na {user.displayName}...</VideoInfo>
+                            <Loader></Loader>
+                        </Cont>
+                    )
+                )}
+
                 <SmallVideo ref={localVideoRef} autoPlay playsinline></SmallVideo>
             </VideoSection>
             <ChatSection>
                 {props.match.params.id}
-                <button onClick={() => start(true)}>start</button>
+                {/* <button onClick={() => start(true)}>start</button> */}
                 <button onClick={() => toggleAudio()}>toggle audio</button>
                 <button onClick={() => toggleVideo()}>toggle video</button>
                 <div>local audio: {String(localAudioActive)}</div>
@@ -202,6 +244,14 @@ const VideoChat = (props: Props) => {
                 <div>remote audio: {String(remoteAudioActive)}</div>
                 <div>remote video: {String(remoteVideoActive)}</div>
                 <div>is remote in room: {String(isRemoteInRoom)}</div>
+                <FormGroup>
+                    <LabelStyled>remote audio</LabelStyled>
+                    <input type="checkbox" checked={remoteAudioActive} disabled/>
+                </FormGroup>
+                <FormGroup>
+                    <LabelStyled>remote vido</LabelStyled>
+                    <input type="checkbox" checked={remoteVideoActive} disabled/>
+                </FormGroup>
             </ChatSection>
         </VideoChatStyled>
     );
@@ -211,4 +261,8 @@ const mapStateToProps = (state: ApplicationState) => {
     return { currentUser: state.auth.currentUser };
 };
 
-export default VideoChat;
+const mapDispatchToProps = {
+    push
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(VideoChat);

@@ -22,7 +22,9 @@ export const VideoSection = styled.div`
     height: 100%;
     box-sizing: border-box;
     overflow: hidden;
-    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 `
 
 export const MainVideo = styled.video`
@@ -45,4 +47,13 @@ export const SmallVideo = styled.video`
     right: 0.5rem;
     height: 20%;
     filter: opacity(1);
+`
+
+export const VideoInfo = styled.div`
+    font-weight: bold;
+    font-size: 1.8rem;
+`
+
+export const Cont = styled.div`
+    
 `
