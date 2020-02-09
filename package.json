@@ -68,11 +68,10 @@
     "yup": "^0.27.0"
   },
   "scripts": {
-    "start": "react-app-rewired start && npm run build-sw",
-    "build": "react-app-rewired build && npm run build-sw",
-    "test": "react-app-rewired test",
-    "eject": "react-scripts eject",
-    "build-sw": "node ./src/sw-build.js"
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject"
   },
   "eslintConfig": {
     "extends": "react-app"
