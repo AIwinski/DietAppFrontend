@@ -1,5 +1,5 @@
 import styled from 'styled-components'
-import { NAV_HEADROOM } from '../../styles/variables'
+import { NAV_HEADROOM, COLORS } from '../../styles/variables'
 
 export const VideoChatStyled = styled.div`
     position: relative;
@@ -15,6 +15,7 @@ export const ChatSection = styled.div`
     height: 100%;
     box-sizing: border-box;
     border-left: 1px solid #ccc;
+    padding: 1rem;
 `
 
 export const VideoSection = styled.div`
@@ -56,4 +57,26 @@ export const VideoInfo = styled.div`
 
 export const Cont = styled.div`
     
+`
+
+export const Buttons = styled.div`
+    margin-top: 1rem;
+    padding-top: 1rem;
+    border-top: 1px solid #ddd;
+    display: flex;
+`
+
+export const Toggle = styled.button`
+    border-radius: 6rem;
+    border: 1px solid #ddd;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 0.5rem;
+    width: 6rem;
+    height: 6rem;
+    font-size: 2.8rem;
+    background: white;
+    color: ${COLORS.blue};
+    cursor: pointer;
 `

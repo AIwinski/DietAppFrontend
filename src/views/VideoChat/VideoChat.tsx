@@ -1,12 +1,25 @@
 import React, { useRef, useEffect, useState } from "react";
-import { VideoChatStyled, VideoSection, ChatSection, MainVideo, SmallVideo, VideoInfo, Cont } from "./VideoChat.styled";
+import {
+    VideoChatStyled,
+    VideoSection,
+    ChatSection,
+    MainVideo,
+    SmallVideo,
+    VideoInfo,
+    Cont,
+    Buttons,
+    Toggle
+} from "./VideoChat.styled";
+import { InfoStyled, InfoWrapper, Name, NoInfo, Email, AccountType, Container } from "../../components/Chat/Info/Info.styled";
 import { ApplicationState } from "../../store";
 import { RouteComponentProps } from "react-router-dom";
 import { socket, Profile } from "../../api";
 import { push } from "connected-react-router";
 import { connect } from "react-redux";
 import Loader from "../../components/Loader/Loader";
-import { FormGroup, LabelStyled } from "../../components/SharedStyledComponents/Form.styled";
+import Avatar from "../../components/Avatar/Avatar";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faAngleDown, faBars, faTimes, faMicrophoneSlash, faMicrophone, faVideo, faVideoSlash } from "@fortawesome/free-solid-svg-icons";
 
 interface MatchParams {
     id: string;
@@ -181,6 +194,9 @@ const VideoChat = (props: Props) => {
     };
 
     const toggleAudio = () => {
+        if(!localStream) {
+            return;
+        }
         setLocalAudioActive(!localAudioActive);
         let tracks = localStream.getAudioTracks();
         for (var i = 0; i < tracks.length; ++i) {
@@ -190,8 +206,10 @@ const VideoChat = (props: Props) => {
     };
 
     const toggleVideo = () => {
+        if(!localStream) {
+            return;
+        }
         setLocalVideoActive(!localVideoActive);
-
         let tracks = localStream.getVideoTracks();
         for (var i = 0; i < tracks.length; ++i) {
             tracks[i].enabled = !tracks[i].enabled;
@@ -235,13 +253,41 @@ const VideoChat = (props: Props) => {
                 <SmallVideo ref={localVideoRef} autoPlay playsinline></SmallVideo>
             </VideoSection>
             <ChatSection>
-                {props.match.params.id}
+                {user ? (
+                    <React.Fragment>
+                        Chat wideo z:
+                        <Container>
+                            <Avatar url={user.avatar}></Avatar>
+                            <Name>{user.displayName}</Name>
+                        </Container>
+                        <Email>Email: {user.email}</Email>
+                        <AccountType>Typ konta: {user.accountType === "doctor" ? "lekarz" : "pacjent"}</AccountType>
+                    </React.Fragment>
+                ) : (
+                    <Loader></Loader>
+                )}
+
+                <Buttons>
+                    <Toggle onClick={() => toggleAudio()}>
+                        {localAudioActive ? (
+                            <FontAwesomeIcon icon={faMicrophone}></FontAwesomeIcon>
+                        ) : (
+                            <FontAwesomeIcon icon={faMicrophoneSlash}></FontAwesomeIcon>
+                        )}
+                    </Toggle>
+                    <Toggle onClick={() => toggleVideo()}>
+                        {localVideoActive ? (
+                            <FontAwesomeIcon icon={faVideo}></FontAwesomeIcon>
+                        ) : (
+                            <FontAwesomeIcon icon={faVideoSlash}></FontAwesomeIcon>
+                        )}
+                    </Toggle>
+                </Buttons>
                 {/* <button onClick={() => start(true)}>start</button> */}
-                <button onClick={() => toggleAudio()}>toggle audio</button>
-                <button onClick={() => toggleVideo()}>toggle video</button>
-                <div>local audio: {String(localAudioActive)}</div>
-                <div>local video: {String(localVideoActive)}</div>
-                <div>remote audio: {String(remoteAudioActive)}</div>
+
+                {/* <div>local audio: {String(localAudioActive)}</div>
+                <div>local video: {String(localVideoActive)}</div> */}
+                {/* <div>remote audio: {String(remoteAudioActive)}</div>
                 <div>remote video: {String(remoteVideoActive)}</div>
                 <div>is remote in room: {String(isRemoteInRoom)}</div>
                 <FormGroup>
@@ -251,7 +297,7 @@ const VideoChat = (props: Props) => {
                 <FormGroup>
                     <LabelStyled>remote vido</LabelStyled>
                     <input type="checkbox" checked={remoteVideoActive} disabled/>
-                </FormGroup>
+                </FormGroup> */}
             </ChatSection>
         </VideoChatStyled>
     );

@@ -179,6 +179,7 @@ const Profile = {
     updateProfileData: (data: UpdateProfileDataProps, id: string) => requests.put('/profile/' + id, data),
     updateUserData: (data: any) => requests.put("/profile/user", data),
     addReview: (data: any) => requests.post("/profile/review", data),
+    updateReview: (data: any) => requests.put("/profile/review", data),
     search: (phrase: string) => requests.get('/profile/search/' + phrase),
     count: () => requests.get("/profile/count"),
     mostRecent: () => requests.get("/profile/most-recent"),

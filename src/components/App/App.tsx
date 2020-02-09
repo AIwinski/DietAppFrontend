@@ -1,4 +1,4 @@
-import React, { Suspense, lazy, useEffect, ComponentType } from "react";
+import React, { Suspense, lazy, useEffect, ComponentType, useState } from "react";
 import { Provider } from "react-redux";
 import { PersistGate } from "redux-persist/integration/react";
 
@@ -29,8 +29,32 @@ const VideoChat = lazy(() => import("../../views/VideoChat/VideoChat"));
 const NotFound = lazy(() => import("../../views/NotFound/NotFound"));
 const AddPatient = lazy(() => import("../../views/AddPatient/AddPatient"));
 const PatientDetails = lazy(() => import("../../views/PatientDetails/PatientDetails"));
+const Offline = lazy(() => import("../../views/Offline/Offline"));
 
 const App = () => {
+    const [isOnline, setIsOnline] = useState(navigator.onLine);
+    useEffect(() => {
+        window.addEventListener("online", updateIndicator);
+        window.addEventListener("offline", updateIndicator);
+
+        history.listen((location: any, action: any) => {
+            console.log(`The current URL is ${location.pathname}${location.search}${location.hash}`)
+            if(!isOnline) {
+                history.push("/offline")
+            } 
+          });
+    }, []);
+
+    const updateIndicator = (e: any) => {
+        console.log(e.type);
+        if (e.type === "offline") {
+            setIsOnline(false);
+        } else {
+            setIsOnline(true);
+            history.push("/")
+        }
+    }
+
     return (
         <Suspense fallback={<BarLoader />}>
             <Provider store={store}>
@@ -38,7 +62,7 @@ const App = () => {
                     <ConnectedRouter history={history}>
                         <React.Fragment>
                             <GlobalStyle />
-                            <Navbar />
+                            <Navbar isOnline={isOnline} />
                             <AnimatedSwitch>
                                 <Route exact path="/" component={Home} />
                                 <Route exact path="/login" component={Login} />
@@ -54,6 +78,7 @@ const App = () => {
                                 <Route path="/not-found" component={NotFound} />
                                 <Route path="/add-patient" component={AddPatient} />
                                 <Route path="/patient-details/:id" component={PatientDetails} />
+                                <Route path="/offline" component={Offline} />
                                 <Redirect to={{ pathname: "/not-found" }} />
                             </AnimatedSwitch>
                         </React.Fragment>

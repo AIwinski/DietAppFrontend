@@ -25,6 +25,8 @@ export const HomeTitle = styled.div`
     line-height: 5rem;
     margin-bottom: 2.5rem;
     color: ${COLORS.blue};
+    display: flex;
+    align-items: center;
 `
 
 export const HomeText = styled.div`

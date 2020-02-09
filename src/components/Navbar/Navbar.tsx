@@ -8,7 +8,9 @@ import {
     NavbarInner,
     NameBadge,
     LinkStyled,
-    AvatarAndDropdown
+    AvatarAndDropdown,
+    OfflineBadge,
+    LogoImage
 } from "./Navbar.styled";
 import { ContainerFluid } from "../SharedStyledComponents/ContainerFluid.styled";
 import { connect } from "react-redux";
@@ -19,97 +21,109 @@ import DropdownMenu from "../DropdownMenu/DropdownMenu";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faAngleDown, faBars, faTimes } from "@fortawesome/free-solid-svg-icons";
 
-type Props = ReturnType<typeof mapStateToProps> & typeof mapDispatchToProps;
+type Props = ReturnType<typeof mapStateToProps> &
+    typeof mapDispatchToProps & {
+        isOnline: boolean;
+    };
 
 const Navbar = (props: Props) => {
     const [menuOpened, setMenuOpened] = useState(false);
 
     return (
         <NavbarStyled>
+            {!props.isOnline && <OfflineBadge>Jesteś offline</OfflineBadge>}
+
             <ContainerFluid maxheight>
-                <NavbarInner>
+                <NavbarInner isOnline={props.isOnline}>
                     <Logo onClick={() => setMenuOpened(false)}>
-                        <LinkStyled to="/">LOGO</LinkStyled>
+                        <LinkStyled to="/"><LogoImage src="/logo.svg" ></LogoImage></LinkStyled>
                     </Logo>
-                    <Hamburger onClick={() => setMenuOpened(!menuOpened)}>
-                        {menuOpened ? (
-                            <FontAwesomeIcon icon={faTimes}></FontAwesomeIcon>
-                        ) : (
-                            <FontAwesomeIcon icon={faBars}></FontAwesomeIcon>
-                        )}
-                    </Hamburger>
-                    <ItemList opened={menuOpened}>
-                        <Item onClick={() => setMenuOpened(false)}>
-                            <LinkStyled to="/list">Przeglądaj profile</LinkStyled>
-                        </Item>
-                        {props.isAuthenticated ? (
-                            <React.Fragment>
+                    {props.isOnline && (
+                        <React.Fragment>
+                            <Hamburger onClick={() => setMenuOpened(!menuOpened)}>
+                                {menuOpened ? (
+                                    <FontAwesomeIcon icon={faTimes}></FontAwesomeIcon>
+                                ) : (
+                                    <FontAwesomeIcon icon={faBars}></FontAwesomeIcon>
+                                )}
+                            </Hamburger>
+                            <ItemList opened={menuOpened}>
                                 <Item onClick={() => setMenuOpened(false)}>
-                                    <LinkStyled to="/chat">Chat</LinkStyled>
+                                    <LinkStyled to="/list">Przeglądaj profile</LinkStyled>
                                 </Item>
-                                {props.currentUser.accountType === "doctor" ? (
+                                {props.isAuthenticated ? (
                                     <React.Fragment>
                                         <Item onClick={() => setMenuOpened(false)}>
-                                            <LinkStyled to={"/dashboard"}>Panel</LinkStyled>
+                                            <LinkStyled to="/chat">Chat</LinkStyled>
                                         </Item>
-                                        <Item>
-                                            <AvatarAndDropdown>
-                                                <Avatar
-                                                    url={props.currentUser.avatar ? props.currentUser.avatar : undefined}
-                                                ></Avatar>
-                                                <NameBadge>{props.currentUser.displayName}</NameBadge>
-                                                <DropdownMenu
-                                                    elements={[
-                                                        { text: "Mój profil", url: "/profile/" + props.currentUser.profileId },
-                                                        { text: "Edytuj profil", url: "/profile-settings" },
-                                                        {
-                                                            text: "Wyloguj się",
-                                                            onclick: () => {
-                                                                props.logout();
+                                        {props.currentUser.accountType === "doctor" ? (
+                                            <React.Fragment>
+                                                <Item onClick={() => setMenuOpened(false)}>
+                                                    <LinkStyled to={"/dashboard"}>Panel</LinkStyled>
+                                                </Item>
+                                                <Item>
+                                                    <AvatarAndDropdown>
+                                                        <Avatar
+                                                            url={props.currentUser.avatar ? props.currentUser.avatar : undefined}
+                                                        ></Avatar>
+                                                        <NameBadge>{props.currentUser.displayName}</NameBadge>
+                                                        <DropdownMenu
+                                                            elements={[
+                                                                {
+                                                                    text: "Mój profil",
+                                                                    url: "/profile/" + props.currentUser.profileId
+                                                                },
+                                                                { text: "Edytuj profil", url: "/profile-settings" },
+                                                                {
+                                                                    text: "Wyloguj się",
+                                                                    onclick: () => {
+                                                                        props.logout();
+                                                                    }
+                                                                }
+                                                            ]}
+                                                        >
+                                                            <FontAwesomeIcon icon={faAngleDown}></FontAwesomeIcon>
+                                                        </DropdownMenu>
+                                                    </AvatarAndDropdown>
+                                                </Item>
+                                            </React.Fragment>
+                                        ) : (
+                                            <Item>
+                                                <AvatarAndDropdown>
+                                                    <Avatar
+                                                        url={props.currentUser.avatar ? props.currentUser.avatar : undefined}
+                                                    ></Avatar>
+                                                    <NameBadge>{props.currentUser.displayName}</NameBadge>
+                                                    <DropdownMenu
+                                                        elements={[
+                                                            { text: "Edytuj profil", url: "/profile-settings" },
+                                                            {
+                                                                text: "Wyloguj się",
+                                                                onclick: () => {
+                                                                    props.logout();
+                                                                }
                                                             }
-                                                        }
-                                                    ]}
-                                                >
-                                                    <FontAwesomeIcon icon={faAngleDown}></FontAwesomeIcon>
-                                                </DropdownMenu>
-                                            </AvatarAndDropdown>
-                                        </Item>
+                                                        ]}
+                                                    >
+                                                        <FontAwesomeIcon icon={faAngleDown}></FontAwesomeIcon>
+                                                    </DropdownMenu>
+                                                </AvatarAndDropdown>
+                                            </Item>
+                                        )}
                                     </React.Fragment>
                                 ) : (
-                                    <Item>
-                                        <AvatarAndDropdown>
-                                            <Avatar
-                                                url={props.currentUser.avatar ? props.currentUser.avatar : undefined}
-                                            ></Avatar>
-                                            <NameBadge>{props.currentUser.displayName}</NameBadge>
-                                            <DropdownMenu
-                                                elements={[
-                                                    { text: "Edytuj profil", url: "/profile-settings" },
-                                                    {
-                                                        text: "Wyloguj się",
-                                                        onclick: () => {
-                                                            props.logout();
-                                                        }
-                                                    }
-                                                ]}
-                                            >
-                                                <FontAwesomeIcon icon={faAngleDown}></FontAwesomeIcon>
-                                            </DropdownMenu>
-                                        </AvatarAndDropdown>
-                                    </Item>
+                                    <React.Fragment>
+                                        <Item onClick={() => setMenuOpened(false)}>
+                                            <LinkStyled to="/login">Logowanie</LinkStyled>
+                                        </Item>
+                                        <Item onClick={() => setMenuOpened(false)}>
+                                            <LinkStyled to="/register">Rejestracja</LinkStyled>
+                                        </Item>
+                                    </React.Fragment>
                                 )}
-                            </React.Fragment>
-                        ) : (
-                            <React.Fragment>
-                                <Item onClick={() => setMenuOpened(false)}>
-                                    <LinkStyled to="/login">Logowanie</LinkStyled>
-                                </Item>
-                                <Item onClick={() => setMenuOpened(false)}>
-                                    <LinkStyled to="/register">Rejestracja</LinkStyled>
-                                </Item>
-                            </React.Fragment>
-                        )}
-                    </ItemList>
+                            </ItemList>
+                        </React.Fragment>
+                    )}
                 </NavbarInner>
             </ContainerFluid>
         </NavbarStyled>

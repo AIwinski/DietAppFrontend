@@ -31,7 +31,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faAngleDown, faSearch, faChartBar, faVideo, faMedal } from "@fortawesome/free-solid-svg-icons";
 import Loader from "../../components/Loader/Loader";
 import Avatar from "../../components/Avatar/Avatar";
-import { LinkStyled } from "../../components/Navbar/Navbar.styled";
+import { LinkStyled, LogoImage } from "../../components/Navbar/Navbar.styled";
 import Rating from "../../components/Rating/Rating";
 import Footer from "../../components/Footer/Footer";
 
@@ -66,8 +66,7 @@ const Home = (props: Props) => {
             <ContainerFluid>
                 <HomeHero>
                     <HomeInner>
-                        <HomeTitle>Witaj w aplikacji</HomeTitle>
-
+                        <HomeTitle>Aplikacja <LogoImage isBig={true} src="/logo.svg" ></LogoImage></HomeTitle>
                         <HomeText>Wyszukaj pośród {count} profili dietetyków!</HomeText>
 
                         <SearchInputWrapper>
@@ -95,7 +94,7 @@ const Home = (props: Props) => {
                             <FontAwesomeIcon icon={faSearch}></FontAwesomeIcon>
                         </InfoCardIcon>
                         <InfoCardText>
-                            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ducimus, praesentium!
+                            Znajdz najlepszego lekarza w swojej okolicy!
                         </InfoCardText>
                     </InfoCard>
                     <InfoCard>
@@ -103,7 +102,7 @@ const Home = (props: Props) => {
                             <FontAwesomeIcon icon={faChartBar}></FontAwesomeIcon>
                         </InfoCardIcon>
                         <InfoCardText>
-                            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ducimus, praesentium!
+                            Idealne narzędzie do zarządzania danymi pacjentów przez lekarzy!
                         </InfoCardText>
                     </InfoCard>
                     <InfoCard>
@@ -111,7 +110,7 @@ const Home = (props: Props) => {
                             <FontAwesomeIcon icon={faVideo}></FontAwesomeIcon>
                         </InfoCardIcon>
                         <InfoCardText>
-                            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ducimus, praesentium!
+                            Przeprowadzaj wizyty online i wymieniaj dane z pacjentami!
                         </InfoCardText>
                     </InfoCard>
                     <InfoCard>
@@ -119,7 +118,7 @@ const Home = (props: Props) => {
                             <FontAwesomeIcon icon={faMedal}></FontAwesomeIcon>
                         </InfoCardIcon>
                         <InfoCardText>
-                            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ducimus, praesentium!
+                            Rozwijaj swoją markę w oparciu o opinie klientów!
                         </InfoCardText>
                     </InfoCard>
                 </InfoSection>

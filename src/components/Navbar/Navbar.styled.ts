@@ -16,13 +16,34 @@ export const NavbarStyled = styled.nav`
     font-weight: bold;
 `;
 
-export const NavbarInner = styled.div`
+type NavbarInnerProps = {
+    isOnline: boolean;
+}
+
+export const NavbarInner = styled.div<NavbarInnerProps>`
     display: flex;
-    justify-content: space-between;
+    justify-content: ${props => (props.isOnline ? "space-between" : "center")};
+    /* justify-content: space-between; */
     align-items: center;
     height: 100%;
     box-sizing: border-box;
 `;
+
+export const OfflineBadge = styled.div`
+    position: absolute;
+    background: #ff2020;
+    opacity: 0.92;
+    height: 2rem;
+    font-size: 1.2rem;
+    bottom: -2rem;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    letter-spacing: 0.1rem;
+    justify-content: center;
+    color: white;
+    z-index: 0;
+`
 
 export const Logo = styled.div`
     padding: 0 ${GUTTER(3)};
@@ -30,6 +51,8 @@ export const Logo = styled.div`
     justify-content: center;
     align-items: center;
     padding-left: 0;
+    position: relative;
+    height: 100%;
 `;
 
 export const Hamburger = styled.button`
@@ -76,6 +99,7 @@ export const Item = styled.li`
     display: flex;
     justify-content: center;
     align-items: center;
+    
 
     :last-of-type {
         padding-right: 0;
@@ -103,6 +127,10 @@ export const LinkStyled = styled(Link)`
     &:hover {
         color: ${COLORS.blue2};
     }
+
+    position: relative;
+    display: flex;
+    align-items: center;
 `
 
 export const NameBadge = styled.span`
@@ -114,4 +142,13 @@ export const AvatarAndDropdown = styled.div`
     display: flex;
     justify-content: center;
     align-items: center;
+`
+
+type LogoImageProps = {
+    isBig?: boolean;
+}
+
+export const LogoImage = styled.img<LogoImageProps>`
+    height: ${props => (props.isBig ? "5rem" : "3.2rem")};
+    margin-left: ${props => (props.isBig ? "2rem" : "0rem")};
 `

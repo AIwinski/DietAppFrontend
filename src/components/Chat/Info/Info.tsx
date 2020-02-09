@@ -33,7 +33,7 @@ const Info = (props: Props) => {
                 </InfoWrapper>
             ) : (
                 <InfoWrapper>
-                    <NoInfo>no info</NoInfo>
+                    <NoInfo>Brak danych</NoInfo>
                 </InfoWrapper>
             )}
         </InfoStyled>

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Formik, Field, Form } from "formik";
 import RatingInput from "../RatingInput/RatingInput";
 import { Link } from "react-router-dom";
@@ -28,11 +28,21 @@ type Props = {
     profile: any;
     setRatingData: (rating: number, sumOfRatings: number) => any;
     isAuthenticated: boolean;
+    currentUser: any;
 };
 
 const ReviewForm = (props: Props) => {
     const [reviews, setReviews] = useState(props.profile.ratings);
     const [inProgress, setInProgress] = useState(false);
+    const [addedReviewId, setAddedReviewId] = useState();
+
+    useEffect(() => {
+        reviews.forEach((e: any) => {
+            if (props.currentUser && e.authorId === props.currentUser.id) {
+                setAddedReviewId(e.id);
+            }
+        });
+    }, [reviews]);
 
     return (
         <React.Fragment>
@@ -40,6 +50,7 @@ const ReviewForm = (props: Props) => {
                 {reviews || (reviews && reviews.length === 0) ? (
                     reviews.map((e: any) => {
                         let date = new Date(e.createdAt).toLocaleDateString("PL-pl");
+                        console.log(e);
                         return (
                             <ReviewElement key={e.id}>
                                 <ReviewTop>
@@ -63,43 +74,68 @@ const ReviewForm = (props: Props) => {
 
             {props.isAuthenticated ? (
                 <React.Fragment>
-                    <ReviewFormInfo>Dodaj swoją recenzję:</ReviewFormInfo>
+                    <ReviewFormInfo>{addedReviewId ? "Edytuj" : "Dodaj"} swoją recenzję:</ReviewFormInfo>
                     <Formik
+                        enableReinitialize={true}
                         initialValues={{
-                            ratingValue: 5,
-                            content: ""
+                            ratingValue: addedReviewId ? reviews.find((r: any) => r.id === addedReviewId).ratingValue : 5,
+                            content: addedReviewId ? reviews.find((r: any) => r.id === addedReviewId).content : ""
                         }}
                         onSubmit={values => {
                             if (values.content.length === 0) {
                                 return;
                             }
                             setInProgress(true);
+                            
+                            if (addedReviewId) {
+                                const data = {
+                                    reviewId: addedReviewId,
+                                    content: values.content,
+                                    ratingValue: values.ratingValue
+                                };
+                                ProfileApi.updateReview(data)
+                                    .then(res => {
+                                        console.log(res);
+                                        reviews.find((r: any) => r.id === addedReviewId).ratingValue = values.ratingValue
+                                        reviews.find((r: any) => r.id === addedReviewId).content = values.content
+                                        let sumOfReviews = 0;
+                                        reviews.forEach((element: any) => {
+                                            sumOfReviews += element.ratingValue;
+                                        });
+                                        let avgRating = sumOfReviews / reviews.length || 0;
 
-                            const data = {
-                                profileId: props.profile.id,
-                                content: values.content,
-                                ratingValue: values.ratingValue
-                            };
-
-                            ProfileApi.addReview(data)
-                                .then(res => {
-                                    console.log(res);
-                                    setReviews([...reviews, res.data.rating]);
-                                    const revs = [...reviews, res.data.rating];
-
-                                    let numberOfRatings = revs.length;
-                                    let sumOfReviews = 0;
-                                    revs.forEach((element: any) => {
-                                        sumOfReviews += element.ratingValue;
+                                        props.setRatingData(avgRating, reviews.length);
+                                        setInProgress(false);
+                                    })
+                                    .catch(err => {
+                                        console.log(err);
                                     });
-                                    let avgRating = sumOfReviews / numberOfRatings || 0;
+                            } else {
+                                const data = {
+                                    profileId: props.profile.id,
+                                    content: values.content,
+                                    ratingValue: values.ratingValue
+                                };
+                                ProfileApi.addReview(data)
+                                    .then(res => {
+                                        console.log(res);
+                                        setReviews([...reviews, res.data.rating]);
+                                        const revs = [...reviews, res.data.rating];
 
-                                    props.setRatingData(avgRating, numberOfRatings);
-                                    setInProgress(false);
-                                })
-                                .catch(err => {
-                                    console.log(err);
-                                });
+                                        let numberOfRatings = revs.length;
+                                        let sumOfReviews = 0;
+                                        revs.forEach((element: any) => {
+                                            sumOfReviews += element.ratingValue;
+                                        });
+                                        let avgRating = sumOfReviews / numberOfRatings || 0;
+
+                                        props.setRatingData(avgRating, numberOfRatings);
+                                        setInProgress(false);
+                                    })
+                                    .catch(err => {
+                                        console.log(err);
+                                    });
+                            }
                         }}
                         render={({ setFieldValue }) => (
                             <Form>
@@ -112,7 +148,7 @@ const ReviewForm = (props: Props) => {
                                     <RatingInput cb={value => setFieldValue("ratingValue", value)} minValue={1} maxValue={5} />
                                 </FormGroup>
                                 <FormGroup>
-                                    <SubmitButton type="submit">Dodaj ocenę</SubmitButton>
+                                    <SubmitButton type="submit">{addedReviewId ? "Edytuj" : "Dodaj"} swoją recenzję</SubmitButton>
                                 </FormGroup>
                             </Form>
                         )}

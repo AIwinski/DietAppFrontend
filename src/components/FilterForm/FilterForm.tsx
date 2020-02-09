@@ -7,7 +7,7 @@ import { ApplicationState } from "../../store";
 import { filter } from "../../store/filters/actions";
 import { FiltersState } from "../../store/filters/types";
 import { FilterFormStyled, ResetButton, FormWrapper } from "./FilterForm.styled";
-import { SubmitButton, FormGroup } from "../SharedStyledComponents/Form.styled";
+import { SubmitButton, FormGroup, LabelStyled } from "../SharedStyledComponents/Form.styled";
 import "react-input-range/lib/css/index.css";
 
 const options = [
@@ -49,7 +49,7 @@ const FilterForm = (props: Props) => {
             render={({ setFieldValue, values, touched, setFieldTouched, errors }) => (
                 <FormWrapper>
                     <FormGroup>
-                        <ResetButton
+                        <SubmitButton
                             onClick={() => {
                                 setFieldValue("priceRange", {
                                     min: 0,
@@ -69,11 +69,12 @@ const FilterForm = (props: Props) => {
                             }}
                         >
                             Resetuj filtry
-                        </ResetButton>
+                        </SubmitButton>
                     </FormGroup>
 
                     <FilterFormStyled>
                         <FormGroup>
+                        <LabelStyled htmlFor="city">Miasto</LabelStyled>
                             <Field name="city" component="select">
                                 {cities.map((c, index) => {
                                     return (
@@ -85,7 +86,7 @@ const FilterForm = (props: Props) => {
                                 <option value="All">Wszystkie</option>
                             </Field>
                         </FormGroup>
-                        <FormGroup>
+                        {/* <FormGroup>
                             <InputRange
                                 maxValue={300}
                                 minValue={0}
@@ -93,8 +94,9 @@ const FilterForm = (props: Props) => {
                                 value={values.priceRange}
                                 onChange={(value: any) => setFieldValue("priceRange", value)}
                             />
-                        </FormGroup>
+                        </FormGroup> */}
                         <FormGroup>
+                        <LabelStyled htmlFor="uslugi">Usługi</LabelStyled>
                             <Select
                                 value={values.services}
                                 onChange={(value: any) => setFieldValue("services", value)}

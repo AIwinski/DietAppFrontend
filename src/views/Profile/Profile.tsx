@@ -136,6 +136,7 @@ const Profile = (props: Props) => {
                                     profile={profile}
                                     setRatingData={setRatingData}
                                     isAuthenticated={props.isAuthenticated}
+                                    currentUser={props.currentUser}
                                 ></ReviewForm>
                             </ProfileSection>
                         </React.Fragment>

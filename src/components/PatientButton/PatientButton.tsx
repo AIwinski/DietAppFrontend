@@ -29,7 +29,7 @@ const PatientButton = (props: Props) => {
                 <Loader></Loader>
             ) : patients.map(p => String(p.userAccountId)).includes(String(props.userAccountId)) ? (
                 <OpenPatientButton to={"/patient-details/" + patients.find(p => String(p.userAccountId)).id}>
-                    Szczegoly pacjenta
+                    Szczegóły pacjenta
                 </OpenPatientButton>
             ) : (
                 <AddPatientButtonStyled to={{ pathname: "/add-patient", state: { userAccountId: props.userAccountId } }}>

@@ -3,16 +3,16 @@ import { connect } from "react-redux";
 import { Formik, Field, Form } from "formik";
 import { ApplicationState } from "../../store";
 import { SortingFormStyled } from "./SortingForm.styled";
-import { Option, SubmitButton, FormGroup } from "../SharedStyledComponents/Form.styled";
+import { Option, SubmitButton, FormGroup, LabelStyled } from "../SharedStyledComponents/Form.styled";
 import { sort } from "../../store/sorting/actions";
 
 type Props = ReturnType<typeof mapStateToProps> & typeof mapDispatchToProps;
 
 const sortingTypes = [
-    { value: "POPULARITY_ASC", label: "Popularność - rosnąco" },
-    { value: "POPULARITY_DESC", label: "Popularność - malejąco" },
     { value: "DATE_ASC", label: "Data - rosnąco" },
-    { value: "DATE_DESC", label: "Data - malejąco" }
+    { value: "DATE_DESC", label: "Data - malejąco" },
+    { value: "REVIEW_ASC", label: "Ocena - rosnąco" },
+    { value: "REVIEW_DESC", label: "Ocena - malejąco" }
 ];
 
 const SortingForm = (props: Props) => {
@@ -29,6 +29,7 @@ const SortingForm = (props: Props) => {
             }}
             render={() => (
                 <SortingFormStyled>
+                    <LabelStyled htmlFor="sorting">Sortowanie</LabelStyled>
                     <FormGroup>
                         <Field name="sorting" component="select">
                             {sortingTypes.map((s, index) => {
