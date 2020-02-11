@@ -72,6 +72,7 @@ const VideoChat = (props: Props) => {
 
         socket.emit("WEBRTC_JOIN", { id: props.match.params.id, audio: localAudioActive, video: localVideoActive });
         socket.on("WEBRTC", (data: any) => {
+            console.log(data);
             gotMessageFromServer(data);
         });
 
@@ -126,12 +127,15 @@ const VideoChat = (props: Props) => {
     }, []);
 
     const getUserMediaSuccess = (stream: any) => {
+        console.log("get user media success")
+        console.log(stream)
         localStream = stream;
         // @ts-ignore
         localVideoRef.current.srcObject = stream;
     };
 
     const start = (isCaller: boolean) => {
+        console.log("start isCaller: " + String(isCaller))
         peerConnection = new RTCPeerConnection(config);
         peerConnection.onicecandidate = gotIceCandidate;
         peerConnection.ontrack = gotRemoteStream;
@@ -146,6 +150,7 @@ const VideoChat = (props: Props) => {
     };
 
     const gotMessageFromServer = (data: any) => {
+        console.log("gotMessageFromServer")
         if (!peerConnection) start(false);
 
         if (data.sdp) {
@@ -167,13 +172,14 @@ const VideoChat = (props: Props) => {
     };
 
     const gotIceCandidate = (event: any) => {
+        console.log("got ice candidate")
         if (event.candidate != null) {
             socket.emit("WEBRTC_SEND", { ice: event.candidate, id: props.match.params.id });
         }
     };
 
     const createdDescription = (description: any) => {
-        console.log("got description");
+        console.log("created description");
 
         peerConnection
             .setLocalDescription(description)
