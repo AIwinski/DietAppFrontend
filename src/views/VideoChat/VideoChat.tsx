@@ -69,8 +69,6 @@ const VideoChat = (props: Props) => {
                     props.push("/");
                 }, 500);
             });
-
-        socket.emit("WEBRTC_JOIN", { id: props.match.params.id, audio: localAudioActive, video: localVideoActive });
         socket.on("WEBRTC", (data: any) => {
             console.log(data);
             gotMessageFromServer(data);
@@ -117,6 +115,8 @@ const VideoChat = (props: Props) => {
         } else {
             alert("Your browser does not support getUserMedia API");
         }
+
+        socket.emit("WEBRTC_JOIN", { id: props.match.params.id, audio: localAudioActive, video: localVideoActive });
     }, []);
 
     useEffect(() => {
