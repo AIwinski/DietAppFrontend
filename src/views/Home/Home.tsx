@@ -67,7 +67,7 @@ const Home = (props: Props) => {
                 <HomeHero>
                     <HomeInner>
                         <HomeTitle>Aplikacja <LogoImage isBig={true} src="/logo.svg" ></LogoImage></HomeTitle>
-                        <HomeText>Wyszukaj pośród {count} profili dietetyków!</HomeText>
+                        <HomeText>Wyszukaj pośród {count} profili lekarzy!</HomeText>
 
                         <SearchInputWrapper>
                             <DebouncedSearchInput

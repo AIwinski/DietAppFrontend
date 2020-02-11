@@ -37,18 +37,19 @@ const App = () => {
         window.addEventListener("online", updateIndicator);
         window.addEventListener("offline", updateIndicator);
 
-        history.listen((location: any, action: any) => {
-            console.log(`The current URL is ${location.pathname}${location.search}${location.hash}`)
-            if(!isOnline) {
-                history.push("/offline")
-            } 
-          });
+        // history.listen((location: any, action: any) => {
+        //     console.log(`The current URL is ${location.pathname}${location.search}${location.hash}`)
+        //     if((!isOnline || !navigator.onLine) && location.pathname !== "/offline") {
+        //         history.push("/offline")
+        //     } 
+        //   });
     }, []);
 
     const updateIndicator = (e: any) => {
         console.log(e.type);
         if (e.type === "offline") {
             setIsOnline(false);
+            history.push("/offline")
         } else {
             setIsOnline(true);
             history.push("/")

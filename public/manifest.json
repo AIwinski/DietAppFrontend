@@ -22,5 +22,5 @@
   "short_name": "Mój lekarz",
   "theme_color": "#2196f3",
   "display": "standalone",
-  "orientation": "portrait",
+  "orientation": "portrait"
 }
