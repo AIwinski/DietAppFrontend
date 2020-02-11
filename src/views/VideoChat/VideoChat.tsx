@@ -83,9 +83,9 @@ const VideoChat = (props: Props) => {
 
         socket.on("WEBRTC_JOINED", (data: any) => {
             setRemoteInRoom(true);
-            if (!peerConnection) {
-                start(true);
-            }
+            // if (!peerConnection) {
+            //     start(true);
+            // }
             if (data.id !== props.currentUser.id) {
                 setRemoteAudioActive(data.audio);
                 setRemoteVideoActive(data.video);
@@ -288,8 +288,9 @@ const VideoChat = (props: Props) => {
                             <FontAwesomeIcon icon={faVideoSlash}></FontAwesomeIcon>
                         )}
                     </Toggle>
+                    <button onClick={() => start(true)}>start</button>
                 </Buttons>
-                {/* <button onClick={() => start(true)}>start</button> */}
+                
 
                 {/* <div>local audio: {String(localAudioActive)}</div>
                 <div>local video: {String(localVideoActive)}</div> */}
