@@ -66,7 +66,7 @@ const Home = (props: Props) => {
             <ContainerFluid>
                 <HomeHero>
                     <HomeInner>
-                        <HomeTitle>Aplikacja <LogoImage isBig={true} src="/logo.svg" ></LogoImage></HomeTitle>
+                        <HomeTitle>Aplikacja <LogoImage isBig={true} src={process.env.PUBLIC_URL + "/logo.svg"} ></LogoImage></HomeTitle>
                         <HomeText>Wyszukaj pośród {count} profili lekarzy!</HomeText>
 
                         <SearchInputWrapper>

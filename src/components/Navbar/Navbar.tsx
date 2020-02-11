@@ -36,7 +36,7 @@ const Navbar = (props: Props) => {
             <ContainerFluid maxheight>
                 <NavbarInner isOnline={props.isOnline}>
                     <Logo onClick={() => setMenuOpened(false)}>
-                        <LinkStyled to="/"><LogoImage src="/logo.svg" ></LogoImage></LinkStyled>
+                        <LinkStyled to="/"><LogoImage src={process.env.PUBLIC_URL + "/logo.svg"} ></LogoImage></LinkStyled>
                     </Logo>
                     {props.isOnline && (
                         <React.Fragment>
