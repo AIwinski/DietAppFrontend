@@ -17,7 +17,9 @@ import { chatReducer } from "./chat/reducer";
 import { filtersReducer } from "./filters/reducer";
 import { sortingReducer } from "./sorting/reducer";
 
-export const history = createBrowserHistory()
+export const history = createBrowserHistory({
+    basename: process.env.PUBLIC_URL
+})
 
 export interface ApplicationState {
     auth: AuthState,
