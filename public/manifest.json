@@ -16,7 +16,7 @@
       "sizes": "512x512"
     }
   ],
-  "start_url": "/DietAppFrontend",
+  "start_url": "/DietAppFrontend/",
   "background_color": "#ffffff",
   "name": "Mój lekarz",
   "short_name": "Mój lekarz",
