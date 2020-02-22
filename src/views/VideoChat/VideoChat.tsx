@@ -83,9 +83,9 @@ const VideoChat = (props: Props) => {
 
         socket.on("WEBRTC_JOINED", (data: any) => {
             setRemoteInRoom(true);
-            // if (!peerConnection) {
-            //     start(true);
-            // }
+            if (data.id === props.currentUser.id) {
+                start(true);
+            }
             if (data.id !== props.currentUser.id) {
                 setRemoteAudioActive(data.audio);
                 setRemoteVideoActive(data.video);

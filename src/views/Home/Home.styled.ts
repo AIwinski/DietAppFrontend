@@ -27,6 +27,11 @@ export const HomeTitle = styled.div`
     color: ${COLORS.blue};
     display: flex;
     align-items: center;
+
+    @media (max-width: ${BREAKPOINTS.md}) {
+        font-size: 4rem;
+        line-height: 4rem;
+    }
 `
 
 export const HomeText = styled.div`

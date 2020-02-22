@@ -151,4 +151,9 @@ type LogoImageProps = {
 export const LogoImage = styled.img<LogoImageProps>`
     height: ${props => (props.isBig ? "5rem" : "3.2rem")};
     margin-left: ${props => (props.isBig ? "2rem" : "0rem")};
+
+    @media (max-width: ${BREAKPOINTS.md}) {
+        height: ${props => (props.isBig ? "4rem" : "2.6rem")};
+        margin-left: ${props => (props.isBig ? "1.6rem" : "0rem")};
+    }
 `

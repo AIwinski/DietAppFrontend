@@ -46,7 +46,7 @@ export const ChatWindow = styled.div`
     position: relative;
 
     @media (max-width: ${BREAKPOINTS.md}) {
-        height: auto;
+        height: 300px;
     }
 `;
 

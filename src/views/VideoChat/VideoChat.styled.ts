@@ -1,5 +1,5 @@
 import styled from 'styled-components'
-import { NAV_HEADROOM, COLORS } from '../../styles/variables'
+import { NAV_HEADROOM, COLORS, BREAKPOINTS } from '../../styles/variables'
 
 export const VideoChatStyled = styled.div`
     position: relative;
@@ -8,6 +8,10 @@ export const VideoChatStyled = styled.div`
     grid-template-columns: 2fr 1fr;
     box-sizing: border-box;
     grid-gap: 0.5rem;
+
+    @media (max-width: ${BREAKPOINTS.md}) {
+        grid-template-columns: 1fr;
+    }
 `
 
 export const ChatSection = styled.div`
@@ -26,6 +30,10 @@ export const VideoSection = styled.div`
     display: flex;
     justify-content: center;
     align-items: center;
+
+    @media (max-width: ${BREAKPOINTS.md}) {
+        width: 100%;
+    }
 `
 
 export const MainVideo = styled.video`
@@ -49,6 +57,10 @@ export const SmallVideo = styled.video`
     height: 20%;
     filter: opacity(1);
     background: #0f0f0f;
+
+    @media (max-width: ${BREAKPOINTS.md}) {
+        height: 25%;
+    }
 `
 
 export const VideoInfo = styled.div`
