@@ -1,6 +1,6 @@
 self.__precacheManifest = (self.__precacheManifest || []).concat([
   {
-    "revision": "ee860a22f19701b9ebb1c516c541e292",
+    "revision": "24d1236d852de9cd320af53f369fb74a",
     "url": "/DietAppFrontend/index.html"
   },
   {
