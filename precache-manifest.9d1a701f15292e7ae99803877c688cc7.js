@@ -1,6 +1,6 @@
 self.__precacheManifest = (self.__precacheManifest || []).concat([
   {
-    "revision": "a04ffde8a3d38b6bb3dc7b0e298fdf2a",
+    "revision": "ee860a22f19701b9ebb1c516c541e292",
     "url": "/DietAppFrontend/index.html"
   },
   {
@@ -24,20 +24,20 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/DietAppFrontend/static/js/10.c6b41552.chunk.js"
   },
   {
-    "revision": "54e79cea16b77a306e9a",
-    "url": "/DietAppFrontend/static/js/11.d697f764.chunk.js"
+    "revision": "8746657a1e68124fa463",
+    "url": "/DietAppFrontend/static/js/11.919dfcd8.chunk.js"
   },
   {
-    "revision": "4654258515a3431d4f70",
-    "url": "/DietAppFrontend/static/js/12.925f849c.chunk.js"
+    "revision": "45b94f158647d5feba1f",
+    "url": "/DietAppFrontend/static/js/12.c8c0c351.chunk.js"
   },
   {
-    "revision": "b5f6eb27495d8f95b0e8",
-    "url": "/DietAppFrontend/static/js/13.fd7e5fcd.chunk.js"
+    "revision": "b5f0411e3f503b85f525",
+    "url": "/DietAppFrontend/static/js/13.ab32a4a5.chunk.js"
   },
   {
-    "revision": "29a3fbf14be52f4489e0",
-    "url": "/DietAppFrontend/static/js/14.74aa99f1.chunk.js"
+    "revision": "66df4d328c946ead5cd1",
+    "url": "/DietAppFrontend/static/js/14.9e19b10f.chunk.js"
   },
   {
     "revision": "82522f290a149a059bb6",
@@ -52,8 +52,8 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/DietAppFrontend/static/js/17.2bba4722.chunk.js"
   },
   {
-    "revision": "49188491b74f697c83d7",
-    "url": "/DietAppFrontend/static/js/18.139a9edd.chunk.js"
+    "revision": "e2cbbc496ed96662fd60",
+    "url": "/DietAppFrontend/static/js/18.9a6db132.chunk.js"
   },
   {
     "revision": "1db1ad050fee07cbe020",
@@ -96,11 +96,11 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/DietAppFrontend/static/js/9.ff6c378e.chunk.js"
   },
   {
-    "revision": "e7514eb0ecb6d8c11094",
-    "url": "/DietAppFrontend/static/js/main.e078b661.chunk.js"
+    "revision": "8f147552062d1efc34ff",
+    "url": "/DietAppFrontend/static/js/main.7a0a1b2f.chunk.js"
   },
   {
-    "revision": "88fbfe64b2be6f422666",
-    "url": "/DietAppFrontend/static/js/runtime-main.859f4306.js"
+    "revision": "f324ab39af31c41fc7c5",
+    "url": "/DietAppFrontend/static/js/runtime-main.f88b038c.js"
   }
 ]);
