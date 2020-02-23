@@ -29,6 +29,7 @@ type Props = RouteComponentProps<MatchParams> & ReturnType<typeof mapStateToProp
 
 let localStream: any;
 let peerConnection: any;
+let interval: any = null;
 
 const mediaStreamConstraints = {
     video: true,
@@ -84,7 +85,11 @@ const VideoChat = (props: Props) => {
         socket.on("WEBRTC_JOINED", (data: any) => {
             setRemoteInRoom(true);
             if (data.id === props.currentUser.id) {
+                alert("SECOND USER JOINED")
                 start(true);
+                // setTimeout(() => {
+                //     start(true);
+                // }, 200);
             }
             if (data.id !== props.currentUser.id) {
                 setRemoteAudioActive(data.audio);
@@ -121,6 +126,8 @@ const VideoChat = (props: Props) => {
 
     useEffect(() => {
         return () => {
+            // @ts-ignore
+            clearInterval(interval);
             socket.emit("WEBRTC_LEAVE", { id: props.match.params.id });
             hangUp();
         };
