@@ -1,6 +1,6 @@
 self.__precacheManifest = (self.__precacheManifest || []).concat([
   {
-    "revision": "e90bedfa30d02257754fa453a1ab62fe",
+    "revision": "e34f9ac86a02cc9a4fd6c2b4fd1a698b",
     "url": "/DietAppFrontend/index.html"
   },
   {
@@ -52,8 +52,8 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/DietAppFrontend/static/js/17.2bba4722.chunk.js"
   },
   {
-    "revision": "5b30bf05eb92da78aa4c",
-    "url": "/DietAppFrontend/static/js/18.0fb3a0c9.chunk.js"
+    "revision": "c97165a8d6884badfc2f",
+    "url": "/DietAppFrontend/static/js/18.96f94cdc.chunk.js"
   },
   {
     "revision": "1db1ad050fee07cbe020",
@@ -100,7 +100,7 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/DietAppFrontend/static/js/main.ce9d1d73.chunk.js"
   },
   {
-    "revision": "d999c7ea1d6c9df6ac25",
-    "url": "/DietAppFrontend/static/js/runtime-main.1ac8a3a4.js"
+    "revision": "a7d4e3400e9bad25358f",
+    "url": "/DietAppFrontend/static/js/runtime-main.3e481f92.js"
   }
 ]);
