@@ -19,17 +19,21 @@ import { connect } from "react-redux";
 import Loader from "../../components/Loader/Loader";
 import Avatar from "../../components/Avatar/Avatar";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faAngleDown, faBars, faTimes, faMicrophoneSlash, faMicrophone, faVideo, faVideoSlash } from "@fortawesome/free-solid-svg-icons";
+import {
+    faAngleDown,
+    faBars,
+    faTimes,
+    faMicrophoneSlash,
+    faMicrophone,
+    faVideo,
+    faVideoSlash
+} from "@fortawesome/free-solid-svg-icons";
 
 interface MatchParams {
     id: string;
 }
 
 type Props = RouteComponentProps<MatchParams> & ReturnType<typeof mapStateToProps> & typeof mapDispatchToProps & {};
-
-let localStream: any;
-let peerConnection: any;
-let interval: any = null;
 
 const mediaStreamConstraints = {
     video: true,
@@ -39,6 +43,10 @@ const config: RTCConfiguration = {
     iceServers: [{ urls: "stun:stun.stunprotocol.org:3478" }, { urls: "stun:stun.l.google.com:19302" }]
 };
 
+var localStream: any;
+var peerConnection: any;
+var interval: any = null;
+
 const VideoChat = (props: Props) => {
     const [localAudioActive, setLocalAudioActive] = useState(true);
     const [localVideoActive, setLocalVideoActive] = useState(true);
@@ -47,6 +55,7 @@ const VideoChat = (props: Props) => {
     const [remoteVideoActive, setRemoteVideoActive] = useState(false);
     const [isRemoteInRoom, setRemoteInRoom] = useState(false);
     const [user, setUser] = useState();
+    const [val, setVal] = useState();
 
     const localVideoRef = useRef(null);
     const remoteVideoRef = useRef(null);
@@ -54,11 +63,22 @@ const VideoChat = (props: Props) => {
     // @ts-ignore
 
     useEffect(() => {
+        interval = setInterval(() => {
+            setVal(Date.now());
+        }, 1000);
         Profile.getUser(props.match.params.id)
             .then(res => {
                 if (res.status === 200) {
                     console.log(res.data);
                     setUser(res.data);
+
+                    setTimeout(() => {
+                        socket.emit("WEBRTC_JOIN", {
+                            id: props.match.params.id,
+                            audio: localAudioActive,
+                            video: localVideoActive
+                        });
+                    }, 300);
                 } else {
                     setTimeout(() => {
                         props.push("/");
@@ -84,17 +104,9 @@ const VideoChat = (props: Props) => {
 
         socket.on("WEBRTC_JOINED", (data: any) => {
             setRemoteInRoom(true);
-            if (data.id === props.currentUser.id) {
-                alert("SECOND USER JOINED")
-                start(true);
-                // setTimeout(() => {
-                //     start(true);
-                // }, 200);
-            }
-            if (data.id !== props.currentUser.id) {
-                setRemoteAudioActive(data.audio);
-                setRemoteVideoActive(data.video);
-            }
+            start(true);
+            setRemoteAudioActive(data.audio);
+            setRemoteVideoActive(data.video);
         });
 
         socket.on("WEBRTC_LEFT", () => {
@@ -120,8 +132,6 @@ const VideoChat = (props: Props) => {
         } else {
             alert("Your browser does not support getUserMedia API");
         }
-
-        socket.emit("WEBRTC_JOIN", { id: props.match.params.id, audio: localAudioActive, video: localVideoActive });
     }, []);
 
     useEffect(() => {
@@ -134,15 +144,15 @@ const VideoChat = (props: Props) => {
     }, []);
 
     const getUserMediaSuccess = (stream: any) => {
-        console.log("get user media success")
-        console.log(stream)
+        console.log("get user media success");
+        console.log(stream);
         localStream = stream;
         // @ts-ignore
         localVideoRef.current.srcObject = stream;
     };
 
     const start = (isCaller: boolean) => {
-        console.log("start isCaller: " + String(isCaller))
+        console.log("start isCaller: " + String(isCaller));
         peerConnection = new RTCPeerConnection(config);
         peerConnection.onicecandidate = gotIceCandidate;
         peerConnection.ontrack = gotRemoteStream;
@@ -157,7 +167,7 @@ const VideoChat = (props: Props) => {
     };
 
     const gotMessageFromServer = (data: any) => {
-        console.log("gotMessageFromServer")
+        console.log("gotMessageFromServer");
         if (!peerConnection) start(false);
 
         if (data.sdp) {
@@ -179,7 +189,7 @@ const VideoChat = (props: Props) => {
     };
 
     const gotIceCandidate = (event: any) => {
-        console.log("got ice candidate")
+        console.log("got ice candidate");
         if (event.candidate != null) {
             socket.emit("WEBRTC_SEND", { ice: event.candidate, id: props.match.params.id });
         }
@@ -207,7 +217,7 @@ const VideoChat = (props: Props) => {
     };
 
     const toggleAudio = () => {
-        if(!localStream) {
+        if (localStream === undefined) {
             return;
         }
         setLocalAudioActive(!localAudioActive);
@@ -219,7 +229,7 @@ const VideoChat = (props: Props) => {
     };
 
     const toggleVideo = () => {
-        if(!localStream) {
+        if (localStream === undefined) {
             return;
         }
         setLocalVideoActive(!localVideoActive);
@@ -281,28 +291,46 @@ const VideoChat = (props: Props) => {
                 )}
 
                 <Buttons>
-                    <Toggle onClick={() => toggleAudio()}>
+                    <Toggle
+                        onClick={() => {
+                            toggleAudio();
+                        }}
+                    >
                         {localAudioActive ? (
                             <FontAwesomeIcon icon={faMicrophone}></FontAwesomeIcon>
                         ) : (
                             <FontAwesomeIcon icon={faMicrophoneSlash}></FontAwesomeIcon>
                         )}
                     </Toggle>
-                    <Toggle onClick={() => toggleVideo()}>
+                    <Toggle
+                        onClick={() => {
+                            toggleVideo();
+                        }}
+                    >
                         {localVideoActive ? (
                             <FontAwesomeIcon icon={faVideo}></FontAwesomeIcon>
                         ) : (
                             <FontAwesomeIcon icon={faVideoSlash}></FontAwesomeIcon>
                         )}
                     </Toggle>
-                    <button onClick={() => start(true)}>start</button>
                 </Buttons>
-                
+                {/* <div>is remote in room: {String(isRemoteInRoom)}</div>
 
-                {/* <div>local audio: {String(localAudioActive)}</div>
-                <div>local video: {String(localVideoActive)}</div> */}
-                {/* <div>remote audio: {String(remoteAudioActive)}</div>
-                <div>remote video: {String(remoteVideoActive)}</div>
+                <div>local audio: {String(localAudioActive)}</div>
+                <div>local video: {String(localVideoActive)}</div>
+                <div>remote audio: {String(remoteAudioActive)}</div>
+                <div>remote video: {String(remoteVideoActive)}</div> */}
+                <button
+                    onClick={() => {
+                        start(true);
+                    }}
+                >
+                    {" "}
+                    start
+                </button>
+
+                <div style={{ display: "none" }}>{val}</div>
+                {/*
                 <div>is remote in room: {String(isRemoteInRoom)}</div>
                 <FormGroup>
                     <LabelStyled>remote audio</LabelStyled>

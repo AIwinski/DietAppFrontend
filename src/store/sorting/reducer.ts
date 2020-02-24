@@ -8,9 +8,10 @@ export const initialState: SortingState = {
 export const sortingReducer: Reducer<SortingState> = (state = initialState, action) => {
     switch (action.type) {
         case SortingActionTypes.SORT:
+            console.log(action.payload)
             return {
                 ...state,
-                ...action.payload
+                sorting: action.payload
             }
         default: {
             return state

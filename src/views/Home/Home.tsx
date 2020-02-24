@@ -34,12 +34,14 @@ import Avatar from "../../components/Avatar/Avatar";
 import { LinkStyled, LogoImage } from "../../components/Navbar/Navbar.styled";
 import Rating from "../../components/Rating/Rating";
 import Footer from "../../components/Footer/Footer";
+import useDocumentTitle from "../../hooks/useDocumentTitle";
 
 type Props = {} & ReturnType<typeof mapStateToProps> & typeof mapDispatchToProps;
 
 const Home = (props: Props) => {
     const [count, setCount] = useState();
     const [mostRecent, setMostRecent] = useState();
+    useDocumentTitle("Mój lekarz");
 
     useEffect(() => {
         Profile.count()

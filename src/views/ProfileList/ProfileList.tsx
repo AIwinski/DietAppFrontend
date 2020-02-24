@@ -33,22 +33,83 @@ const ProfileList = (props: Props) => {
 
             const profiles = filterProfiles(res.data.profiles);
             setProfiles(profiles);
+            sortProfiles();
             setIsFetching(false);
         });
     }, []);
 
-    // useEffect(() => {
-    //     const filters = props.filters;
-    //     const prevFilters = usePrevious({ filters });
-    //     if (prevFilters !== filters) {
-    //         console.log("update");
-    //         setAllFetched(true);
-    //         filterProfilesInState();
-    //     }
-    // }, [props.filters]);
+    useEffect(() => {
+        if(profiles.length === 0) {
+            fetchProfiles().then(res => {
+                console.log(res);
+    
+                const profiles = filterProfiles(res.data.profiles);
+                setProfiles(profiles);
+                setIsFetching(false);
+            });
+        }
+    }, [profiles]);
 
-    const fetchProfiles = () => {
-        return ProfileApi.getProfiles(profiles.length, props.filters);
+    useEffect(() => {
+        console.log(props.sorting);
+        sortProfiles()
+    }, [props.sorting]);
+
+    useEffect(() => {
+        setProfiles([]);
+    }, [props.filters])
+
+    const sortProfiles = () => {
+        console.log(props.sorting)
+        if(props.sorting === 'DATE_ASC') {
+            setProfiles(profiles.sort((a, b) => {
+                const d1 = new Date(a.createdAt);
+                const d2 = new Date(b.createdAt);
+                if(d1.getTime() > d2.getTime()) {
+                    return 1;
+                } else if (d1.getTime() < d2.getTime()) {
+                    return -1;
+                } else {
+                    return 0;
+                }
+            }));
+        } else if (props.sorting === 'DATE_DESC') {
+            setProfiles(profiles.sort((a, b) => {
+                const d1 = new Date(a.createdAt);
+                const d2 = new Date(b.createdAt);
+                if(d1.getTime() < d2.getTime()) {
+                    return 1;
+                } else if (d1.getTime() > d2.getTime()) {
+                    return -1;
+                } else {
+                    return 0;
+                }
+            }));
+        } else if(props.sorting === 'REVIEW_ASC') {
+            setProfiles(profiles.sort((a, b) => {
+                if(a.totalRating > b.totalRating) {
+                    return 1;
+                } else if (a.totalRating < b.totalRating) {
+                    return -1;
+                } else {
+                    return 0;
+                }
+            }));
+        } else if(props.sorting === 'REVIEW_DESC') {
+            setProfiles(profiles.sort((a, b) => {
+                if(a.totalRating > b.totalRating) {
+                    return -1;
+                } else if (a.totalRating < b.totalRating) {
+                    return 1;
+                } else {
+                    return 0;
+                }
+            }));
+        }
+    }
+
+    const fetchProfiles = (a?: number) => {
+        return ProfileApi.getProfiles(a || profiles.length, props.filters);
     };
 
     const filterProfilesInState = () => {
@@ -56,16 +117,7 @@ const ProfileList = (props: Props) => {
     };
 
     const filterProfiles = (profiles: any) => {
-        //to do add more filters
-        let filteredProfiles = profiles
-            .map((profile: any) => profile.id)
-            .filter((value: any, index: any, self: any) => self.indexOf(value) === index); //only unique in case there are two equal profiles
-
-        filteredProfiles = filteredProfiles.filter((profile: any) => {
-            return profile.city === props.filters.city; //city
-        });
-
-        return profiles;
+        return profiles.filter((value: any, index: any, self: any) => self.map((x: any) => x.id).indexOf(value.id) == index) 
     };
 
     const tryFetchMore = () => {
@@ -79,6 +131,11 @@ const ProfileList = (props: Props) => {
                     setAllFetched(true);
                     setIsFetching(false);
                 } else {
+                    const qty = fetchedProfiles.length;
+                    const qty2 = filterProfiles([...profiles, ...fetchedProfiles]).length;
+                    if(qty === qty2) {
+                        setAllFetched(true);
+                    }
                     setProfiles(filterProfiles([...profiles, ...fetchedProfiles]));
                     setIsFetching(false);
                 }
@@ -127,7 +184,7 @@ const ProfileList = (props: Props) => {
 };
 
 const mapStateToProps = (state: ApplicationState) => {
-    return { filters: state.filters };
+    return { filters: state.filters, sorting: state.sorting.sorting };
 };
 
 export default connect(mapStateToProps, null)(ProfileList);
