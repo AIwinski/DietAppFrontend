@@ -14,7 +14,7 @@
 importScripts("https://storage.googleapis.com/workbox-cdn/releases/4.3.1/workbox-sw.js");
 
 importScripts(
-  "/DietAppFrontend/precache-manifest.1f18e85dafec0ba38c45d72671da65eb.js"
+  "/DietAppFrontend/precache-manifest.994550b2c023de33030564d3d6a92203.js"
 );
 
 self.addEventListener('message', (event) => {
