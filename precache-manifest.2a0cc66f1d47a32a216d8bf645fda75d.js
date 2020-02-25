@@ -1,6 +1,6 @@
 self.__precacheManifest = (self.__precacheManifest || []).concat([
   {
-    "revision": "01e14cd77a09f324bc5db64fd1b12cab",
+    "revision": "4853ef0412d93411721e4b228ebb31cc",
     "url": "/DietAppFrontend/index.html"
   },
   {
@@ -96,8 +96,8 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/DietAppFrontend/static/js/9.ff6c378e.chunk.js"
   },
   {
-    "revision": "03eee6fe4e84d8b9f8de",
-    "url": "/DietAppFrontend/static/js/main.0f298b6b.chunk.js"
+    "revision": "112033654ac3e7998971",
+    "url": "/DietAppFrontend/static/js/main.14ea4cef.chunk.js"
   },
   {
     "revision": "77eaebc3fd3ff071d932",
