@@ -4,12 +4,12 @@ import { ContainerFluid } from "../../components/SharedStyledComponents/Containe
 import useDocumentTitle from "../../hooks/useDocumentTitle";
 
 const RegisterSuccess = () => {
-    useDocumentTitle("Register - success");
+    useDocumentTitle("Mój Lekarz - Zarejestrowano pomyślnie");;
 
     return (
         <RegisterSuccessStyled>
             <ContainerFluid>
-                REGISTER SUCCESS
+                Zarejestrowano pomyślnie!
             </ContainerFluid>
         </RegisterSuccessStyled>
     );

@@ -45,6 +45,7 @@ import { SubmitButton } from "../../components/SharedStyledComponents/Form.style
 import { LinkStyled } from "../../components/Navbar/Navbar.styled";
 import Note from "../../components/Notes/Note/Note";
 import NoteForm from "../../components/Notes/NoteForm/NoteForm";
+import useDocumentTitle from "../../hooks/useDocumentTitle";
 
 interface MatchParams {
     id: string;
@@ -53,6 +54,9 @@ interface MatchParams {
 type Props = RouteComponentProps<MatchParams> & {};
 
 const PatientDetails = (props: Props) => {
+
+    useDocumentTitle("Mój lekarz - Szczegóły pacjenta");
+
     const [isPatientFetching, setPatientFetching] = useState(true);
     const [patient, setPatient] = useState();
 

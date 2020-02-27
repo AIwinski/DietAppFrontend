@@ -17,6 +17,7 @@ import BarLoader from "../../components/BarLoader/BarLoader";
 import PersonalSettings from "../../components/PersonalSettings/PersonalSettings";
 import GeneralSettings from "../../components/GeneralSettings/GeneralSettings";
 import { setCurrentUser } from "../../store/auth/actions";
+import useDocumentTitle from "../../hooks/useDocumentTitle";
 
 type Props = ReturnType<typeof mapStateToProps> & typeof mapDispatchToProps & {};
 
@@ -24,6 +25,8 @@ const ProfileSettings = (props: Props) => {
     const id = props.currentUser.profileId;
     const [profile, setProfile] = useState();
     const [currentView, setCurrentView] = useState("PERSONAL");
+
+    useDocumentTitle("Mój Lekarz - Ustawienia");
 
     useEffect(() => {
         if (props.currentUser.accountType === "doctor") {

@@ -39,11 +39,12 @@ type Props = RouteComponentProps<MatchParams> & ReturnType<typeof mapStateToProp
 
 const Profile = (props: Props) => {
     const id = props.match.params.id;
-    useDocumentTitle("Profile " + id);
 
     const [profile, setProfile] = useState();
     const [totalRating, setTotalRating] = useState(0);
     const [numberOfReviews, setNumberOfReviews] = useState(0);
+
+    useDocumentTitle("Mój Lekarz - Profil");
 
     useEffect(() => {
         ProfileApi.getProfile(id)

@@ -21,6 +21,7 @@ import { LinkStyled } from "../../components/Navbar/Navbar.styled";
 import moment from "moment";
 import { SectionTitle } from "../Home/Home.styled";
 import Footer from "../../components/Footer/Footer";
+import useDocumentTitle from "../../hooks/useDocumentTitle";
 
 type Props = ReturnType<typeof mapStateToProps>;
 
@@ -30,6 +31,8 @@ const Dashboard = (props: Props) => {
     const [isNotesFetching, setNotesFetching] = useState(true);
     const [isPatientsFetching, setPatientsFetching] = useState(true);
     const [patients, setPatients] = useState([] as any[]);
+
+    useDocumentTitle("Mój lekarz - panel lekarza");
 
     useEffect(() => {
         Profile.getReport(30, props.profileId)

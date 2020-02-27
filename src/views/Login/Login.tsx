@@ -29,15 +29,15 @@ import useDocumentTitle from "../../hooks/useDocumentTitle";
 
 const loginValidationSchema = Yup.object().shape({
     email: Yup.string()
-        .email("Wrong email")
-        .required("Email is required"),
-    password: Yup.string().required("Password is required")
+        .email("Niepoprawny email")
+        .required("Pole email jest wymagane"),
+    password: Yup.string().required("Pole hasło jest wymagane")
 });
 
 type Props = ReturnType<typeof mapStateToProps> & typeof mapDispatchToProps & RouteComponentProps;
 
 const Login = (props: Props) => {
-    useDocumentTitle("Login");
+    useDocumentTitle("Mój Lekarz - Logowanie");
     let from: any = null;
 
     if (props.location) {
@@ -92,8 +92,8 @@ const Login = (props: Props) => {
                                 <ErrorMessageStyled name="email" component="div" />
                             </FormGroup>
                             <FormGroup>
-                                <LabelStyled htmlFor="password">Password</LabelStyled>
-                                <FieldStyled name="password" type="password" placeholder="password" id="password" />
+                                <LabelStyled htmlFor="password">Hasło</LabelStyled>
+                                <FieldStyled name="password" type="password" placeholder="Hasło" id="password" />
                                 <ErrorMessageStyled name="password" component="div" />
                             </FormGroup>
                             <FormGroup>
@@ -104,7 +104,13 @@ const Login = (props: Props) => {
                                     fields="name,email,picture"
                                     callback={responseFacebook}
                                     render={(renderProps: any) => (
-                                        <SubmitButton onClick={renderProps.onClick} light>
+                                        <SubmitButton
+                                            onClick={(e) => {
+                                                e.preventDefault();
+                                                renderProps.onClick();
+                                            }}
+                                            light
+                                        >
                                             Zaloguj się za pomocą facebooka <i className="facebook-f"></i>
                                         </SubmitButton>
                                     )}

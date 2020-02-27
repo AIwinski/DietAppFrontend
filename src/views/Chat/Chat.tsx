@@ -29,7 +29,7 @@ interface MatchParams {
 type Props = RouteComponentProps<MatchParams> & ReturnType<typeof mapStateToProps> & typeof mapDispatchToProps & {};
 
 const Chat = (props: Props) => {
-    useDocumentTitle("Chat");
+    useDocumentTitle("Mój Lekarz - Chat");
     const [activeConversationId, setActiveConversationId] = useState(props.match.params.id);
     const [conversations, setConversations] = useState([] as any[]);
     const [activeConversationMessages, setActiveConversationMessages] = useState([] as any[]);

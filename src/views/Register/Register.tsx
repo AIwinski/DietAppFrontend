@@ -28,22 +28,22 @@ import { ContainerFluid } from "../../components/SharedStyledComponents/Containe
 
 const RegisterValidationSchema = Yup.object().shape({
     email: Yup.string()
-        .email("Invalid email")
-        .required("Required"),
-    password: Yup.string().required("Password is required"),
+        .email("Nieprawidłowy email")
+        .required("Pole email jest wymagane"),
+    password: Yup.string().required("Pole hasło jest wymagane"),
     passwordConfirm: Yup.string()
-        .required("Confirm password is required")
-        .oneOf([Yup.ref("password"), null], "Passwords must match"),
+        .required("Pole powtórz hasło jest wymagane")
+        .oneOf([Yup.ref("password"), null], "Hasła muszą się zgadzać"),
     displayName: Yup.string()
-        .required("Nick is required")
-        .min(3, "Minimum length of nick is 3 characters")
-        .max(50, "Maximum length of nick is 50 characters")
+        .required("Nazwa użytkownika jest wymagana")
+        .min(3, "Nazwa musi mieć długość minimum 3 znaków")
+        .max(50, "Nazwa może mieć długość maksymalnie 50 znaków")
 });
 
 type Props = ReturnType<typeof mapStateToProps> & typeof mapDispatchToProps & {};
 
 const Register = (props: Props) => {
-    useDocumentTitle("Register");
+    useDocumentTitle("Mój Lekarz - Rejestracja");
 
     useEffect(() => {
         return () => {
@@ -112,30 +112,30 @@ const Register = (props: Props) => {
                                     <ErrorMessageStyled name="email" component="div" />
                                 </FormGroup>
                                 <FormGroup>
-                                    <LabelStyled htmlFor="displayName">Nick</LabelStyled>
-                                    <FieldStyled name="displayName" id="displayName" placeholder="Display name" />
+                                    <LabelStyled htmlFor="displayName">Nazwa użytkownika</LabelStyled>
+                                    <FieldStyled name="displayName" id="displayName" placeholder="Nazwa użytkownika" />
 
                                     <ErrorMessageStyled name="displayName" component="div" />
                                 </FormGroup>
                                 <FormGroup>
-                                    <LabelStyled htmlFor="password">Password</LabelStyled>
-                                    <FieldStyled name="password" id="password" placeholder="Password" type="password" />
+                                    <LabelStyled htmlFor="password">Hasło</LabelStyled>
+                                    <FieldStyled name="password" id="password" placeholder="Hasło" type="password" />
 
                                     <ErrorMessageStyled name="password" component="div" />
                                 </FormGroup>
                                 <FormGroup>
-                                    <LabelStyled htmlFor="passwordConfirm">Confirm password</LabelStyled>
+                                    <LabelStyled htmlFor="passwordConfirm">Powtórz hasło</LabelStyled>
                                     <FieldStyled
                                         name="passwordConfirm"
                                         id="passwordConfirm"
-                                        placeholder="Confirm password"
+                                        placeholder="Powtórz hasło"
                                         type="password"
                                     />
 
                                     <ErrorMessageStyled name="passwordConfirm" component="div" />
                                 </FormGroup>
                                 <FormGroup>
-                                    <SubmitButton type="submit">Register</SubmitButton>
+                                    <SubmitButton type="submit">Zarejestruj się</SubmitButton>
                                 </FormGroup>
                             </FormStyled>
                         </RegisterPageStyledInner>

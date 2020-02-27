@@ -28,6 +28,7 @@ import {
     faVideo,
     faVideoSlash
 } from "@fortawesome/free-solid-svg-icons";
+import useDocumentTitle from "../../hooks/useDocumentTitle";
 
 interface MatchParams {
     id: string;
@@ -48,11 +49,12 @@ var peerConnection: any;
 var interval: any = null;
 
 const VideoChat = (props: Props) => {
+    useDocumentTitle("Mój Lekarz - Chat video");
     const [localAudioActive, setLocalAudioActive] = useState(true);
     const [localVideoActive, setLocalVideoActive] = useState(true);
 
-    const [remoteAudioActive, setRemoteAudioActive] = useState(false);
-    const [remoteVideoActive, setRemoteVideoActive] = useState(false);
+    const [remoteAudioActive, setRemoteAudioActive] = useState(true);
+    const [remoteVideoActive, setRemoteVideoActive] = useState(true);
     const [isRemoteInRoom, setRemoteInRoom] = useState(false);
     const [user, setUser] = useState();
     const [val, setVal] = useState();
@@ -64,6 +66,15 @@ const VideoChat = (props: Props) => {
 
     useEffect(() => {
         interval = setInterval(() => {
+            if ((peerConnection && peerConnection.signalingState === "have-local-offer") || !remoteVideoRef) {
+                start(true);
+                console.log("staredt");
+            }
+            // @ts-ignore
+            if (remoteVideoRef && remoteVideoRef.current && remoteVideoRef.current.srcObject === null) {
+                console.log("video null");
+                start(true);
+            }
             setVal(Date.now());
         }, 1000);
         Profile.getUser(props.match.params.id)
@@ -104,9 +115,11 @@ const VideoChat = (props: Props) => {
 
         socket.on("WEBRTC_JOINED", (data: any) => {
             setRemoteInRoom(true);
-            start(true);
             setRemoteAudioActive(data.audio);
             setRemoteVideoActive(data.video);
+            setTimeout(() => {
+                start(true);
+            }, 1500);
         });
 
         socket.on("WEBRTC_LEFT", () => {
@@ -320,7 +333,7 @@ const VideoChat = (props: Props) => {
                 <div>local video: {String(localVideoActive)}</div>
                 <div>remote audio: {String(remoteAudioActive)}</div>
                 <div>remote video: {String(remoteVideoActive)}</div> */}
-                <button
+                {/* <button
                     onClick={() => {
                         start(true);
                     }}
@@ -329,7 +342,20 @@ const VideoChat = (props: Props) => {
                     start
                 </button>
 
-                <div style={{ display: "none" }}>{val}</div>
+                <div style={{ display: "block" }}>{val}</div>
+
+                <div>
+                    rtc peer peerConnection:
+                    <div>
+                        {peerConnection && (
+                            <React.Fragment>
+                                <div>signalingState: {String(peerConnection.signalingState)}</div>
+                                <div>connectionState: {String(peerConnection.connectionState)}</div>
+                                <div>iceConnectionState: {String(peerConnection.iceConnectionState)}</div>
+                            </React.Fragment>
+                        )}
+                    </div>
+                </div> */}
                 {/*
                 <div>is remote in room: {String(isRemoteInRoom)}</div>
                 <FormGroup>

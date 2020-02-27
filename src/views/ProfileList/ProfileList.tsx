@@ -18,6 +18,7 @@ import { Profile as ProfileApi } from "../../api";
 import Loader from "../../components/Loader/Loader";
 import { ApplicationState } from "../../store";
 import BarLoader from "../../components/BarLoader/BarLoader";
+import useDocumentTitle from "../../hooks/useDocumentTitle";
 
 type Props = ReturnType<typeof mapStateToProps>;
 
@@ -26,6 +27,8 @@ const ProfileList = (props: Props) => {
     const [isFetching, setIsFetching] = React.useState(false);
     const [allFetched, setAllFetched] = React.useState(false);
 
+    useDocumentTitle("Mój Lekarz - Przeglądaj profile");
+
     useEffect(() => {
         setIsFetching(true);
         fetchProfiles().then(res => {
@@ -33,7 +36,6 @@ const ProfileList = (props: Props) => {
 
             const profiles = filterProfiles(res.data.profiles);
             setProfiles(profiles);
-            sortProfiles();
             setIsFetching(false);
         });
     }, []);
@@ -48,6 +50,7 @@ const ProfileList = (props: Props) => {
                 setIsFetching(false);
             });
         }
+        sortProfiles();
     }, [profiles]);
 
     useEffect(() => {

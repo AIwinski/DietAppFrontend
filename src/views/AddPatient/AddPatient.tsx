@@ -21,6 +21,7 @@ import { connect } from "react-redux";
 import { RouteComponentProps } from "react-router-dom";
 import { Profile, Patient } from "../../api";
 import { push } from "connected-react-router";
+import useDocumentTitle from "../../hooks/useDocumentTitle";
 
 const addPatientValidationSchema = Yup.object().shape({
     therapyGoal: Yup.string().required("Cel terapii jest wymagany"),
@@ -35,6 +36,7 @@ const addPatientValidationSchema = Yup.object().shape({
 type Props = ReturnType<typeof mapStateToProps> & typeof mapDispatchToProps & {} & RouteComponentProps;
 
 const AddPatient = (props: Props) => {
+    useDocumentTitle("Mój lekarz - dodaj pacjenta");
     const [inProgress, setInProgress] = useState(false);
     const [userData, setUserData] = useState();
 

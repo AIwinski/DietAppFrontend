@@ -33,6 +33,7 @@ export const VideoSection = styled.div`
 
     @media (max-width: ${BREAKPOINTS.md}) {
         width: 100%;
+        height: 60vh;
     }
 `
 
