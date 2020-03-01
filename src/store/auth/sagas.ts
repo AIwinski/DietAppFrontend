@@ -32,6 +32,7 @@ function* handleRegister(action: ReturnType<typeof registerRequest>) {
             yield put(registerError(res.error))
         } else {
             yield put(registerSuccess(res.data))
+            yield put(push("/register-success"));
         }
     } catch (err) {
         yield put(registerError(err))
